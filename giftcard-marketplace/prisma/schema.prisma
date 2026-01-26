@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum SubmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PAID
+}
+
+model User {
+  id             String        @id @default(cuid())
+  name           String?
+  email          String        @unique
+  password       String
+  role           Role          @default(USER)
+  paymentDetails String?
+  createdAt      DateTime      @default(now())
+  submissions    Submission[]
+}
+
+model GiftCard {
+  id          String        @id @default(cuid())
+  slug        String        @unique
+  name        String
+  imagePath   String
+  rate        Float
+  description String
+  region      String?
+  category    String?
+  payoutSpeed String?
+  trend       String?
+  weeklyVolume String?
+  isActive    Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  submissions Submission[]
+}
+
+model Submission {
+  id            String           @id @default(cuid())
+  userId        String
+  giftCardId    String
+  cardValue     Float
+  payoutAmount  Float
+  cardCode      String?
+  cardImagePath String?
+  payoutMethod  String?
+  payoutDetails String?
+  status        SubmissionStatus @default(PENDING)
+  adminNote     String?
+  createdAt     DateTime         @default(now())
+  user          User             @relation(fields: [userId], references: [id])
+  giftCard      GiftCard         @relation(fields: [giftCardId], references: [id])
+}

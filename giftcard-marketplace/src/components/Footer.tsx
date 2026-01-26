@@ -1,0 +1,41 @@
+export default function Footer() {
+  return (
+    <footer className="border-t border-slate-200/70 bg-white/80">
+      <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 py-10 md:grid-cols-[1.4fr_1fr_1fr]">
+        <div>
+          <p className="text-xs uppercase tracking-[0.3em] text-slate-500">
+            Novacard Market
+          </p>
+          <p className="mt-3 text-lg font-semibold text-slate-900">
+            Liquidate gift cards with bank-grade speed and insight.
+          </p>
+          <p className="mt-3 text-sm text-slate-500">
+            24/7 liquidity, real-time rates, and compliance-first payouts for
+            sellers across Africa, US, and EU corridors.
+          </p>
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-slate-900">Marketplace</p>
+          <ul className="mt-3 space-y-2 text-sm text-slate-500">
+            <li>Live rates</li>
+            <li>Seller dashboard</li>
+            <li>Security & compliance</li>
+            <li>Liquidity partners</li>
+          </ul>
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-slate-900">Support</p>
+          <ul className="mt-3 space-y-2 text-sm text-slate-500">
+            <li>help@novacard.com</li>
+            <li>+233 50 112 9032</li>
+            <li>Telegram: @novacardmarket</li>
+            <li>Terms & privacy</li>
+          </ul>
+        </div>
+      </div>
+      <div className="border-t border-slate-200/70 py-4 text-center text-xs text-slate-400">
+        Built for real-time gift card liquidity. All rights reserved.
+      </div>
+    </footer>
+  );
+}

@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f5f7fb;
+  --foreground: #0b1220;
+  --surface: #ffffff;
+  --surface-strong: #eef3fb;
+  --stroke: rgba(148, 163, 184, 0.35);
+  --accent: #0ea5e9;
+  --accent-2: #14b8a6;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-manrope), "Manrope", "Inter", system-ui, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.market-glow {
+  background-image: radial-gradient(
+      circle at top left,
+      rgba(14, 165, 233, 0.25),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 20% 30%,
+      rgba(20, 184, 166, 0.2),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 80% 10%,
+      rgba(251, 191, 36, 0.2),
+      transparent 50%
+    );
+}
