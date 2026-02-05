@@ -1,0 +1,53 @@
+# Deploying NovaCard Marketplace to Render (No Local Console Needed)
+
+## Step 1 – Connect GitHub and fork the repo
+1. Fork `Loveago/novacar` into your GitHub account (or ensure you have push access).
+2. Sign in to [Render](https://dashboard.render.com/) with the same GitHub profile and authorize repository access.
+
+## Step 2 – Provision the database on Render
+1. In Render, click **New → PostgreSQL**.
+2. Choose a name like `novacard-db`, pick the free tier, and click **Create Database**.
+3. After the instance is live, open it and copy the **Internal Database URL** (Render auto-rotates credentials). You’ll paste this into the web service as `DATABASE_URL`.
+
+## Step 3 – Create the Web Service
+1. Click **New → Web Service** and select your `novacar` repo.
+2. Configure:
+   - **Branch:** `main`
+   - **Root Directory:** `.`
+   - **Environment:** `Node`
+   - **Region:** closest to your users
+   - **Instance Type:** Starter (or higher if needed)
+3. Build & run commands:
+   - **Build Command:** `npm install && npm run build`
+   - **Start Command:** `npm run start`
+4. Add environment variables (click **Advanced → Environment → Add Environment Variable**):
+   - `DATABASE_URL` → use the Internal DB URL from Step 2.
+   - `AUTH_SECRET` → long random string (e.g., `openssl rand -hex 32`).
+   - `CARD_SECRET` → another random string (used by your payout helpers).
+   - `NEXTAUTH_URL` → `https://<your-render-service>.onrender.com`
+   - Optional: set `NODE_ENV=production` (Render does this automatically, but it doesn’t hurt).
+5. Click **Create Web Service**. Render will start the first build.
+
+## Step 4 – Run Prisma migrations & seed (no console required)
+Render doesn’t expose SSH/terminal for free plans, but you can run commands via Jobs:
+1. After the web service is created, click **New → Job**.
+2. Choose the same repo/branch and name it `prisma-migrate`.
+3. Set the command to `npx prisma migrate deploy && npx prisma db seed`.
+4. Click **Create Job**, then hit **Run Job** once. The Job runs inside Render and applies migrations plus seeds the admin/seller users and gift cards.
+5. If you ever need to re-run migrations (after a schema change), just run the Job again.
+
+## Step 5 – Verify the deployment
+1. Wait for the web service build to finish (status "Live").
+2. Visit the Render URL shown in the dashboard.
+3. Log in with the seeded credentials:
+   - Admin: `admin@novacard.com / Admin123!`
+   - Seller: `seller@novacard.com / Seller123!`
+4. Check `/marketplace`, `/dashboard`, `/sell/<slug>`, and `/admin/gift-cards` to confirm data loads.
+
+## Step 6 – Ongoing maintenance
+- **Environment changes:** Update env vars under the web service’s **Environment** tab → **Save Changes → Deploy Latest Commit**.
+- **DB credentials rotation:** Render rotates passwords when you hit "Regenerate Credentials" in the Postgres dashboard. Update the `DATABASE_URL` env var and redeploy.
+- **Schema updates:** Push code, then run the `prisma-migrate` job to apply migrations.
+- **Rollbacks:** Use the **Deploys** tab on the web service to roll back to an earlier successful build.
+
+> Tip: If you prefer automation, convert the `prisma-migrate` job into a **Cron Job** (e.g., run daily) or add a GitHub Action that triggers Render’s Deploy Hook after pushing migrations.

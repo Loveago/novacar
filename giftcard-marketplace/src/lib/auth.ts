@@ -10,6 +10,7 @@ type SessionUser = DefaultSession["user"] & {
 };
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  trustHost: true,
   session: {
     strategy: "jwt",
   },
