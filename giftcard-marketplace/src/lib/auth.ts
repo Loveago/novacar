@@ -4,6 +4,11 @@ import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
+type SessionUser = DefaultSession["user"] & {
+  id: string;
+  role: string;
+};
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: {
     strategy: "jwt",
@@ -59,8 +64,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       token: JWT;
     }) => {
       if (session.user) {
-        session.user.id = token.id as string;
-        session.user.role = token.role as string;
+        const userWithRole = session.user as SessionUser;
+        userWithRole.id = token.id as string;
+        userWithRole.role = token.role as string;
       }
       return session;
     },
