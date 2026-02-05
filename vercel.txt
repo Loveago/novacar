@@ -1,0 +1,41 @@
+# Deploying NovaCard Marketplace to Vercel (Super Simple)
+
+## Step 1 – Log in
+- GitHub: make sure the repo `Loveago/novacar` is in your account.
+- Vercel: log in with the same GitHub profile so it can see that repo.
+
+## Step 2 – Create the project
+1. In Vercel click **Add New → Project**.
+2. Pick **Import Git Repository**.
+3. Select `Loveago/novacar`. Vercel automatically knows it’s a Next.js app, so leave the defaults.
+
+## Step 3 – Paste your secrets
+In the import screen, scroll to **Environment Variables** and add:
+- `DATABASE_URL` → your live Postgres URL.
+- `AUTH_SECRET` → any long random string.
+- `CARD_SECRET` → another long random string.
+Set **Environment** to “Production + Preview” so every deploy uses the same values.
+
+## Step 4 – First deploy
+Hit **Deploy**. Vercel builds the app and gives you a Preview URL once it says **Ready**. Open the link to make sure the site loads.
+
+## Step 5 – Keep the database in sync
+You can do this without touching your own terminal:
+1. Inside the Vercel project, go to **Settings → Deploy Hooks** and create a hook named `migrate`.
+2. Copy the hook URL.
+3. In GitHub, open **Settings → Webhooks → Add webhook** and paste that URL. Leave the event as “push”. Now each push triggers a fresh deploy + Prisma migrate.
+4. Need a manual run? Use **Vercel → Project → Deployments → Run Command → npx prisma migrate deploy**. It executes directly in Vercel’s environment.
+
+## Step 6 – Double-check
+- Visit `/marketplace`, `/sell/<slug>`, `/dashboard`, `/admin/gift-cards`.
+- Log in with `admin@novacard.com / Admin123!` to confirm the DB works.
+
+## Step 7 – Go live
+When the preview looks good, click **Promote to Production**. Any new push to `main` redeploys automatically.
+
+## Step 8 – Everyday maintenance
+- Change secrets in **Settings → Environment Variables**, hit **Save**, then **Redeploy**.
+- View build logs in the **Deployments** tab.
+- Need to roll back? Choose an older deployment in the list and press **Promote**.
+
+> **Note:** Vercel’s disk resets on each deploy. For long-term image storage, switch uploads to S3, Supabase Storage, or any service that gives you a public URL.

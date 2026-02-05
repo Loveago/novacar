@@ -1,0 +1,272 @@
+Build a modern gift card buy-back marketplace web app where users can browse gift cards like a marketplace, submit cards to sell, and an admin manages gift card listings, images, and prices.
+NO Mistakes 
+
+Tech Stack
+
+Frontend: Next.js (App Router)
+
+Backend: Node.js using Next.js API routes
+
+Database: PostgreSQL with Prisma ORM
+
+Authentication: NextAuth Credentials Provider
+
+Styling: Tailwind CSS + modern UI components
+
+File Storage: Local disk storage (server file system)
+
+Core Concept
+
+This is a gift card marketplace UI where:
+
+Users see gift cards displayed as product cards (logo, name, rate, price info).
+
+Users select a gift card and submit details to sell it.
+
+Admin manages gift cards like a marketplace catalog (add/edit/delete with images and rates).
+
+Admin reviews submissions and manually sends payment.
+
+User Roles
+User (Seller)
+
+Register and log in
+
+Browse gift card marketplace
+
+View gift card details and rates
+
+Submit gift card details to sell
+
+Track transaction status
+
+Add payment details
+
+Admin
+
+Full CRUD for gift cards (name, image, rate, description)
+
+Edit prices and exchange rates
+
+View and manage submissions
+
+Approve or reject submissions
+
+Mark transactions as paid
+
+Manage users
+
+Marketplace UI Requirements
+
+Grid layout with gift card cards like an e-commerce store
+
+Each card shows:
+
+Gift card image/logo
+
+Name
+
+Buy rate (e.g. $1 = ₵X)
+
+“Sell Now” button
+
+Modern hero section and categories
+
+Responsive and mobile-friendly
+
+Pages & Routes
+Public
+
+/ – Marketplace homepage with gift card grid
+
+/gift-cards/[id] – Gift card details page
+
+/auth/register
+
+/auth/login
+
+/faq
+
+/contact
+
+User (Protected)
+
+/dashboard – User overview
+
+/sell/[id] – Sell selected gift card
+
+/transactions – Transaction history
+
+/profile – Payment details settings
+
+Admin (Protected)
+
+/admin – Admin dashboard
+
+/admin/gift-cards – Manage gift cards
+
+/admin/submissions – Review submissions
+
+/admin/users – Manage users
+
+Gift Card Marketplace Management
+
+Admin must be able to:
+
+Add new gift cards with:
+
+Name
+
+Image upload (saved on disk)
+
+Rate (price per dollar)
+
+Description
+
+Active / inactive status
+
+Edit existing gift cards
+
+Delete gift cards
+
+Gift Card Selling Flow
+
+User browses marketplace
+
+Clicks Sell Now
+
+Enters:
+
+Card value
+
+Card code OR uploads card image
+
+System calculates payout
+
+Submission saved as PENDING
+
+Admin reviews and updates status
+
+Admin Submission Review Flow
+
+View card details and uploaded images
+
+Approve or reject submission
+
+Add admin notes
+
+Mark transaction as PAID after sending money
+
+Transaction Status
+
+PENDING
+
+APPROVED
+
+REJECTED
+
+PAID
+
+Database Models (Prisma)
+User
+
+id
+
+name
+
+email
+
+password
+
+role (USER | ADMIN)
+
+paymentDetails
+
+createdAt
+
+GiftCard
+
+id
+
+name
+
+imagePath (local disk path)
+
+rate
+
+description
+
+isActive
+
+createdAt
+
+Submission
+
+id
+
+userId
+
+giftCardId
+
+cardValue
+
+payoutAmount
+
+cardCode (encrypted)
+
+cardImagePath
+
+status
+
+adminNote
+
+createdAt
+
+File Upload Requirements
+
+Save images to /public/uploads/giftcards/
+
+Save submitted card images to /private/submissions/
+
+Store file paths in database
+
+Validate file type and size
+
+Security
+
+Hash passwords
+
+Encrypt card codes in DB
+
+Role-based route protection
+
+Admin-only API routes for gift card CRUD
+
+UI Requirements
+
+Marketplace-style UI like Shopify/crypto marketplaces
+
+Card-based grid with hover effects
+
+Admin dashboard with tables and modals
+
+Status badges (Pending, Approved, Paid, Rejected)
+
+Form validation and loading states
+
+Extras
+
+Seed default gift cards with placeholder images
+
+Seed admin account
+
+README with setup steps
+
+Clean modular folder structure
+
+Production-ready code
+
+Build the full project with clean architecture, reusable components, and sensible defaults.
+
+
+
