@@ -3,6 +3,7 @@ import type { JWT } from "next-auth/jwt";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { ensureSeedData } from "@/lib/seed";
 
 type SessionUser = DefaultSession["user"] & {
   id: string;
@@ -21,6 +22,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
+        await ensureSeedData();
         const email = credentials?.email ? String(credentials.email) : "";
         const password = credentials?.password ? String(credentials.password) : "";
         if (!email || !password) {

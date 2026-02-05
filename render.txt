@@ -25,16 +25,22 @@
    - `AUTH_SECRET` → long random string (e.g., `openssl rand -hex 32`).
    - `CARD_SECRET` → another random string (used by your payout helpers).
    - `NEXTAUTH_URL` → `https://<your-render-service>.onrender.com`
+   - `AUTO_SEED` → set to `true` for the first deploy (auto-creates the admin user + initial gift cards at runtime).
+   - Optional seed overrides:
+     - `SEED_ADMIN_EMAIL`
+     - `SEED_ADMIN_PASSWORD`
+     - `SEED_SELLER_EMAIL`
+     - `SEED_SELLER_PASSWORD`
    - Optional: set `NODE_ENV=production` (Render does this automatically, but it doesn’t hurt).
 5. Click **Create Web Service**. Render will start the first build.
 
-## Step 4 – Run Prisma migrations & seed (no console required)
-Render doesn’t expose SSH/terminal for free plans, but you can run commands via Jobs:
-1. After the web service is created, click **New → Job**.
-2. Choose the same repo/branch and name it `prisma-migrate`.
-3. Set the command to `npx prisma migrate deploy && npx prisma db seed`.
-4. Click **Create Job**, then hit **Run Job** once. The Job runs inside Render and applies migrations plus seeds the admin/seller users and gift cards.
-5. If you ever need to re-run migrations (after a schema change), just run the Job again.
+## Step 4 – Database setup on Render Free (no console / no jobs)
+Render Free typically doesn’t offer Jobs/SSH. This app can seed itself when `AUTO_SEED=true`.
+
+1. Make sure your database schema is created (migrations) at least once.
+   - If you can’t run `npx prisma migrate deploy` on Render, run it from your own machine using the Render `DATABASE_URL`.
+2. For initial data (admin user + gift cards), set `AUTO_SEED=true` and redeploy.
+3. After you confirm you can log in and the marketplace has data, you can set `AUTO_SEED` back to `false`.
 
 ## Step 5 – Verify the deployment
 1. Wait for the web service build to finish (status "Live").

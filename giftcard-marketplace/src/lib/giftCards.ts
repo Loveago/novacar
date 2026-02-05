@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { ensureSeedData } from "@/lib/seed";
 
 function isMissingTableError(error: unknown): error is { code?: string } {
   return (
@@ -12,6 +13,7 @@ function isMissingTableError(error: unknown): error is { code?: string } {
 
 export async function fetchActiveGiftCards() {
   try {
+    await ensureSeedData();
     return await prisma.giftCard.findMany({
       where: { isActive: true },
       orderBy: { createdAt: "desc" },
