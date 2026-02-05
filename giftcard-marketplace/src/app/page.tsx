@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import SiteShell from "@/components/SiteShell";
-import MarketplaceCard from "@/components/MarketplaceCard";
 import StatCard from "@/components/StatCard";
+import MarketplaceCard from "@/components/MarketplaceCard";
 import { categoryFilters, dashboardStats } from "@/data/marketplace";
-import { prisma } from "@/lib/prisma";
 import { toMarketplaceCard } from "@/lib/marketplace";
+import { fetchActiveGiftCards } from "@/lib/giftCards";
 import type { MarketplaceCardData } from "@/types/marketplace";
 
 const activityFeed = [
@@ -16,10 +16,7 @@ const activityFeed = [
 ];
 
 export default async function Home() {
-  const giftCards = await prisma.giftCard.findMany({
-    where: { isActive: true },
-    orderBy: { createdAt: "desc" },
-  });
+  const giftCards = await fetchActiveGiftCards();
   const marketplaceCards: MarketplaceCardData[] = giftCards.map(toMarketplaceCard);
 
   return (

@@ -3,14 +3,11 @@ import Link from "next/link";
 import SiteShell from "@/components/SiteShell";
 import MarketplaceCard from "@/components/MarketplaceCard";
 import { categoryFilters } from "@/data/marketplace";
-import { prisma } from "@/lib/prisma";
 import { toMarketplaceCard } from "@/lib/marketplace";
+import { fetchActiveGiftCards } from "@/lib/giftCards";
 
 export default async function MarketplacePage() {
-  const giftCards = await prisma.giftCard.findMany({
-    where: { isActive: true },
-    orderBy: { createdAt: "desc" },
-  });
+  const giftCards = await fetchActiveGiftCards();
 
   const marketplaceCards = giftCards.map(toMarketplaceCard);
   const liveQuotes = marketplaceCards.slice(0, 4);
