@@ -2,13 +2,19 @@ import Link from "next/link";
 import { logoutUser } from "@/app/actions/auth";
 import { auth } from "@/lib/auth";
 
-const navLinks = [
+const publicLinks = [
   { label: "Marketplace", href: "/marketplace" },
-  { label: "Rates", href: "/marketplace#rates" },
   { label: "FAQ", href: "/faq" },
-  { label: "Contact", href: "/contact" },
+];
+
+const userLinks = [
   { label: "Dashboard", href: "/dashboard" },
   { label: "Support", href: "/support" },
+];
+
+const adminLinks = [
+  { label: "Admin", href: "/admin" },
+  { label: "Messages", href: "/admin/messages" },
 ];
 
 export default async function TopNav() {
@@ -31,26 +37,26 @@ export default async function TopNav() {
             </p>
           </div>
         </Link>
-        <nav className="hidden items-center gap-6 text-sm font-medium text-slate-600 lg:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="transition hover:text-slate-900"
-            >
+        <nav className="hidden items-center gap-5 text-sm font-medium text-slate-600 lg:flex">
+          {publicLinks.map((link) => (
+            <Link key={link.href} href={link.href} className="transition hover:text-slate-900">
               {link.label}
             </Link>
           ))}
-          {isAdmin ? (
-            <>
-              <Link href="/admin" className="transition hover:text-slate-900">
-                Admin
-              </Link>
-              <Link href="/admin/messages" className="transition hover:text-slate-900">
-                Messages
-              </Link>
-            </>
-          ) : null}
+          {session
+            ? userLinks.map((link) => (
+                <Link key={link.href} href={link.href} className="transition hover:text-slate-900">
+                  {link.label}
+                </Link>
+              ))
+            : null}
+          {isAdmin
+            ? adminLinks.map((link) => (
+                <Link key={link.href} href={link.href} className="transition hover:text-slate-900">
+                  {link.label}
+                </Link>
+              ))
+            : null}
         </nav>
         <div className="flex items-center gap-3">
           {session ? (

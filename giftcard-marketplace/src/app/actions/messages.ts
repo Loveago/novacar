@@ -10,13 +10,16 @@ export async function sendMessageToAdmin(formData: FormData) {
   const body = toStringValue(formData.get("body"))?.trim();
   if (!body) return;
 
+  const senderId = (session.user as { id?: string }).id;
+  if (!senderId) return;
+
   const admin = await prisma.user.findFirst({ where: { role: "ADMIN" } });
   if (!admin) return;
 
   await prisma.message.create({
     data: {
       body,
-      senderId: session.user.id,
+      senderId,
       receiverId: admin.id,
     },
   });
@@ -30,10 +33,13 @@ export async function sendAdminReply(formData: FormData) {
   const userId = toStringValue(formData.get("userId"));
   if (!body || !userId) return;
 
+  const senderId = (session.user as { id?: string }).id;
+  if (!senderId) return;
+
   await prisma.message.create({
     data: {
       body,
-      senderId: session.user.id,
+      senderId,
       receiverId: userId,
     },
   });
@@ -44,11 +50,13 @@ export async function sendAdminReply(formData: FormData) {
 
 export async function markConversationRead(userId: string) {
   const session = await requireAdmin();
+  const adminId = (session.user as { id?: string }).id;
+  if (!adminId) return;
 
   await prisma.message.updateMany({
     where: {
       senderId: userId,
-      receiverId: session.user.id,
+      receiverId: adminId,
       isRead: false,
     },
     data: { isRead: true },
