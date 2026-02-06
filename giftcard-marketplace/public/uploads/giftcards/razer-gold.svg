@@ -1,0 +1,14 @@
+<svg width="320" height="200" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="razerGold" cx="0.3" cy="0.3" r="1">
+      <stop offset="0%" stop-color="#fff9d6" />
+      <stop offset="60%" stop-color="#f7ce4c" />
+      <stop offset="100%" stop-color="#d18e06" />
+    </radialGradient>
+  </defs>
+  <rect width="320" height="200" rx="36" fill="#141414" />
+  <circle cx="180" cy="100" r="70" fill="url(#razerGold)" />
+  <circle cx="210" cy="70" r="30" fill="#ffffff" opacity="0.08" />
+  <text x="40" y="120" font-family="'Orbitron', 'Eurostile', 'Segoe UI', sans-serif" font-size="44" font-weight="700" fill="#39ff14">Razer</text>
+  <text x="40" y="150" font-family="'Orbitron', 'Eurostile', 'Segoe UI', sans-serif" font-size="32" font-weight="600" fill="#ffd75f">GOLD</text>
+</svg>

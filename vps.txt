@@ -42,6 +42,13 @@ These steps assume you have:
    DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DB?schema=public"
    AUTH_SECRET="your-long-random-string"
    CARD_SECRET="your-other-long-string"
+   NEXTAUTH_URL="https://novacard.com"
+   AUTO_SEED="false"
+   # Optional (only if AUTO_SEED=true)
+   # SEED_ADMIN_EMAIL="admin@novacard.com"
+   # SEED_ADMIN_PASSWORD="Admin123!"
+   # SEED_SELLER_EMAIL="seller@novacard.com"
+   # SEED_SELLER_PASSWORD="Seller123!"
    EOF
    ```
 3. **Install packages**
@@ -51,7 +58,9 @@ These steps assume you have:
 4. **Apply migrations and seed (if needed)**
    ```bash
    npx prisma migrate deploy
-   node prisma/seed.cjs   # optional, only once in fresh DB
+   # Option A (recommended): one-time seed
+   node prisma/seed.cjs
+   # Option B: set AUTO_SEED=true in .env and restart the app once
    ```
 5. **Build the app**
    ```bash
@@ -62,7 +71,11 @@ These steps assume you have:
    pm2 start npm --name novacar -- start
    pm2 save
    ```
-   - App now runs on the default Next.js port (3000). Ensure it stays running after reboot (`pm2 startup`).
+   - App now runs on the default Next.js port (3000).
+   - Enable boot on restart:
+     ```bash
+     pm2 startup
+     ```
 
 ---
 ## 3. Configure Nginx reverse proxy
@@ -79,6 +92,8 @@ These steps assume you have:
        proxy_set_header Upgrade $http_upgrade;
        proxy_set_header Connection 'upgrade';
        proxy_set_header Host $host;
+       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+       proxy_set_header X-Forwarded-Proto $scheme;
        proxy_cache_bypass $http_upgrade;
      }
    }
@@ -100,6 +115,11 @@ These steps assume you have:
    - Proxy status: **Proxied** (orange cloud) if you want Cloudflare caching/SSL; **DNS only** if you prefer direct access.
 3. (Optional) Add `www` CNAME pointing to `@`.
 
+Recommended Cloudflare settings:
+- **SSL/TLS mode:** Full (Strict)
+- **Always Use HTTPS:** On
+- **Automatic HTTPS Rewrites:** On
+
 ---
 ## 5. Enable HTTPS (recommended)
 If Cloudflare is set to **Proxied**, make sure SSL/TLS mode is **Full**. If you prefer end-to-end TLS with your server:
@@ -113,22 +133,41 @@ If Cloudflare is set to **Proxied**, make sure SSL/TLS mode is **Full**. If you 
    ```
 3. Certbot auto-renews; verify with `sudo systemctl status certbot.timer`.
 
+If you keep Cloudflare **Proxied** and want strict origin security without Let’s Encrypt, you can also use a **Cloudflare Origin Certificate** (installed on the VPS) + SSL/TLS set to **Full (Strict)**.
+
 ---
-## 6. Deploying updates
+## 6. Firewall (recommended)
+Allow only SSH, HTTP, and HTTPS:
+```bash
+sudo ufw allow OpenSSH
+sudo ufw allow 80
+sudo ufw allow 443
+sudo ufw enable
+sudo ufw status
+```
+
+---
+## 7. Deploying updates
 1. SSH into the server and pull latest changes:
    ```bash
    cd ~/novacar
    git pull origin main
    npm install
+   npx prisma migrate deploy
    npm run build
    pm2 restart novacar
    ```
 2. If you modify Prisma schema, rerun `npx prisma migrate deploy` before restarting the app.
 
 ---
-## 7. Troubleshooting
+## 8. Troubleshooting
 - **App not reachable**: `pm2 logs novacar` and `sudo journalctl -u nginx`.
 - **Env vars missing**: ensure `.env` exists and `pm2 restart` after editing.
 - **Uploads/storage**: local `/public/uploads` works on VPS because the disk persists. Make sure folder permissions allow `pm2` user to write if you enable runtime uploads.
+
+Auth-specific checks:
+- **Admin login not working**: make sure the DB was migrated + seeded.
+- **If using AUTO_SEED**: set `AUTO_SEED=true`, restart once, log in, then set it back to `false`.
+- **If auth errors about host**: ensure `NEXTAUTH_URL` matches your public domain (e.g. `https://novacard.com`).
 
 That’s it! Your Next.js marketplace now runs on your VPS with a Cloudflare-backed domain.

@@ -103,4 +103,43 @@ export const seedGiftCards: SeedGiftCard[] = [
     trend: "+1.6%",
     weeklyVolume: "$38k weekly",
   },
+  {
+    slug: "vanilla",
+    name: "Vanilla Visa",
+    imagePath: "/uploads/giftcards/vanilla.svg",
+    rate: 10.25,
+    description:
+      "Reloadable Vanilla Visa cards with strong liquidity and instant verification.",
+    region: "North America",
+    category: "Prepaid",
+    payoutSpeed: "20 min payout",
+    trend: "+1.2%",
+    weeklyVolume: "$24k weekly",
+  },
+  {
+    slug: "neosurf",
+    name: "Neosurf",
+    imagePath: "/uploads/giftcards/neosurf.svg",
+    rate: 10.6,
+    description:
+      "Popular cash-based voucher for EU buyers with steady weekly demand.",
+    region: "Europe",
+    category: "Payments",
+    payoutSpeed: "Instant payout",
+    trend: "+2.8%",
+    weeklyVolume: "$19k weekly",
+  },
+  {
+    slug: "razer-gold",
+    name: "Razer Gold",
+    imagePath: "/uploads/giftcards/razer-gold.svg",
+    rate: 9.85,
+    description:
+      "Gaming wallet credit with bonus rates during esports events.",
+    region: "Global",
+    category: "Gaming",
+    payoutSpeed: "15 min payout",
+    trend: "+3.5%",
+    weeklyVolume: "$21k weekly",
+  },
 ];

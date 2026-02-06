@@ -1,0 +1,14 @@
+<svg width="320" height="200" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="vanillaGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fef9f3" />
+      <stop offset="100%" stop-color="#f6e6d1" />
+    </linearGradient>
+  </defs>
+  <rect width="320" height="200" rx="36" fill="url(#vanillaGradient)" />
+  <circle cx="70" cy="100" r="38" fill="#f1d1a1" opacity="0.6" />
+  <circle cx="250" cy="70" r="28" fill="#f1d1a1" opacity="0.8" />
+  <circle cx="235" cy="135" r="36" fill="#f5dabc" opacity="0.4" />
+  <text x="40" y="120" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="48" font-weight="600" fill="#8a6a45">Vanilla</text>
+  <text x="42" y="150" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="16" letter-spacing="0.3em" fill="#b99872">VISA</text>
+</svg>
