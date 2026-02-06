@@ -14,6 +14,8 @@ In the import screen, scroll to **Environment Variables** and add:
 - `DATABASE_URL` → your live Postgres URL.
 - `AUTH_SECRET` → any long random string.
 - `CARD_SECRET` → another long random string.
+- `RESEND_API_KEY` → your Resend API key (from https://resend.com/api-keys).
+- `EMAIL_FROM` → e.g. `NovaCard <noreply@yourdomain.com>` (must match a verified domain in Resend).
 Set **Environment** to “Production + Preview” so every deploy uses the same values.
 
 ## Step 4 – First deploy

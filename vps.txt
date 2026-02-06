@@ -43,6 +43,8 @@ These steps assume you have:
    AUTH_SECRET="your-long-random-string"
    CARD_SECRET="your-other-long-string"
    NEXTAUTH_URL="https://novacard.com"
+   RESEND_API_KEY="re_your_resend_api_key"
+   EMAIL_FROM="NovaCard <noreply@yourdomain.com>"
    AUTO_SEED="false"
    # Optional (only if AUTO_SEED=true)
    # SEED_ADMIN_EMAIL="admin@novacard.com"

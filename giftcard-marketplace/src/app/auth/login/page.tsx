@@ -2,7 +2,12 @@ import Link from "next/link";
 import SiteShell from "@/components/SiteShell";
 import { loginUser } from "@/app/actions/auth";
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ reset?: string }>;
+}) {
+  const { reset } = await searchParams;
   return (
     <SiteShell>
       <div className="mx-auto w-full max-w-5xl px-6 pb-24 pt-12">
@@ -17,6 +22,11 @@ export default function LoginPage() {
             <p className="mt-2 text-sm text-slate-500">
               Log in to track payouts, manage submissions, and view live rates.
             </p>
+            {reset && (
+              <div className="mt-4 rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                Password reset successful. You can now log in with your new password.
+              </div>
+            )}
             <form className="mt-6 space-y-4" action={loginUser}>
               <input
                 className="w-full rounded-2xl border border-slate-200/80 bg-white px-4 py-3 text-sm"
@@ -33,6 +43,14 @@ export default function LoginPage() {
                 Sign in
               </button>
             </form>
+            <div className="mt-3 text-right">
+              <Link
+                href="/auth/forgot-password"
+                className="text-sm text-slate-500 hover:text-slate-900"
+              >
+                Forgot password?
+              </Link>
+            </div>
             <div className="mt-4 flex items-center justify-between text-sm text-slate-500">
               <span>Need access?</span>
               <Link href="/auth/register" className="font-semibold text-slate-900">

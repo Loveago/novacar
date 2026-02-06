@@ -25,6 +25,8 @@
    - `AUTH_SECRET` → long random string (e.g., `openssl rand -hex 32`).
    - `CARD_SECRET` → another random string (used by your payout helpers).
    - `NEXTAUTH_URL` → `https://<your-render-service>.onrender.com`
+   - `RESEND_API_KEY` → your Resend API key (from https://resend.com/api-keys).
+   - `EMAIL_FROM` → e.g. `NovaCard <noreply@yourdomain.com>` (must match a verified domain in Resend).
    - `AUTO_SEED` → set to `true` for the first deploy (auto-creates the admin user + initial gift cards at runtime).
    - Optional seed overrides:
      - `SEED_ADMIN_EMAIL`

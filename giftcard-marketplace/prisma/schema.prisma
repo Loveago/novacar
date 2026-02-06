@@ -28,6 +28,7 @@ model User {
   paymentDetails String?
   createdAt      DateTime      @default(now())
   submissions    Submission[]
+  resetTokens    PasswordResetToken[]
 }
 
 model GiftCard {
@@ -46,6 +47,15 @@ model GiftCard {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   submissions Submission[]
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Submission {
