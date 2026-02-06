@@ -6,7 +6,7 @@ import { formatDateTime } from "@/lib/format";
 
 export default async function AdminMessagesPage() {
   const session = await requireAdmin();
-  const adminId = session.user.id;
+  const adminId = (session.user as { id?: string }).id ?? "";
 
   const messages = await prisma.message.findMany({
     where: {

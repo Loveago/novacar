@@ -3,7 +3,7 @@ import SiteShell from "@/components/SiteShell";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/guards";
 import { formatDateTime } from "@/lib/format";
-import { sendAdminReply, markConversationRead } from "@/app/actions/messages";
+import { sendAdminReply } from "@/app/actions/messages";
 
 export default async function AdminConversationPage({
   params,
@@ -11,7 +11,7 @@ export default async function AdminConversationPage({
   params: Promise<{ userId: string }>;
 }) {
   const session = await requireAdmin();
-  const adminId = session.user.id;
+  const adminId = (session.user as { id?: string }).id ?? "";
   const { userId } = await params;
 
   const user = await prisma.user.findUnique({ where: { id: userId } });
@@ -25,7 +25,15 @@ export default async function AdminConversationPage({
     );
   }
 
-  await markConversationRead(userId);
+  // Mark unread messages as read directly (not via server action)
+  await prisma.message.updateMany({
+    where: {
+      senderId: userId,
+      receiverId: adminId,
+      isRead: false,
+    },
+    data: { isRead: true },
+  });
 
   const messages = await prisma.message.findMany({
     where: {
@@ -66,15 +74,15 @@ export default async function AdminConversationPage({
               </p>
             )}
             {messages.map((msg) => {
-              const isAdmin = msg.senderId === adminId;
+              const fromAdmin = msg.senderId === adminId;
               return (
                 <div
                   key={msg.id}
-                  className={`flex ${isAdmin ? "justify-end" : "justify-start"}`}
+                  className={`flex ${fromAdmin ? "justify-end" : "justify-start"}`}
                 >
                   <div
                     className={`max-w-[75%] rounded-2xl px-4 py-3 text-sm ${
-                      isAdmin
+                      fromAdmin
                         ? "bg-slate-900 text-white"
                         : "bg-white text-slate-900 border border-slate-200/70"
                     }`}

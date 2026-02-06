@@ -6,7 +6,7 @@ import { sendMessageToAdmin } from "@/app/actions/messages";
 
 export default async function SupportPage() {
   const session = await requireAuth();
-  const userId = session.user.id;
+  const userId = (session.user as { id?: string }).id ?? "";
 
   const admin = await prisma.user.findFirst({ where: { role: "ADMIN" } });
 
