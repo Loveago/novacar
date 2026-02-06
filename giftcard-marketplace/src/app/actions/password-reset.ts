@@ -35,7 +35,12 @@ export async function requestPasswordReset(formData: FormData) {
   });
 
   const resetUrl = `${appUrl()}/auth/reset-password?token=${token}`;
-  await sendPasswordResetEmail(user.email, resetUrl);
+
+  try {
+    await sendPasswordResetEmail(user.email, resetUrl);
+  } catch (err) {
+    console.error("Password reset email failed:", err);
+  }
 
   redirect("/auth/forgot-password?sent=1");
 }
