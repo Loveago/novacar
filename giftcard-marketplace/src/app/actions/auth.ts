@@ -60,12 +60,15 @@ export async function logoutUser() {
   await signOut({ redirectTo: "/auth/login" });
 }
 
-export async function loginUser(formData: FormData) {
+export async function loginUser(
+  _prev: { error?: string } | undefined,
+  formData: FormData
+): Promise<{ error?: string }> {
   const email = toStringValue(formData.get("email"));
   const password = toStringValue(formData.get("password"));
 
   if (!email || !password) {
-    return;
+    return { error: "Please enter your email and password." };
   }
 
   try {
@@ -76,7 +79,7 @@ export async function loginUser(formData: FormData) {
     });
   } catch (error) {
     if (isCredentialsSignin(error)) {
-      return;
+      return { error: "Invalid email or password." };
     }
     throw error;
   }

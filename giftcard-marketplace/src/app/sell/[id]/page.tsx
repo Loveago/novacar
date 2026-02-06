@@ -117,7 +117,7 @@ export default async function SellPage({ params }: SellPageProps) {
                       Card value (USD)
                     </label>
                     <input
-                      className="mt-2 w-full rounded-2xl border border-slate-200/80 bg-white px-4 py-3 text-sm transition focus:border-slate-300 focus:outline-none"
+                      className="mt-2 w-full rounded-2xl border border-slate-200/80 bg-white px-4 py-3 text-sm transition focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"
                       placeholder="$250"
                       name="cardValue"
                       required
@@ -128,7 +128,7 @@ export default async function SellPage({ params }: SellPageProps) {
                       Card code
                     </label>
                     <input
-                      className="mt-2 w-full rounded-2xl border border-slate-200/80 bg-white px-4 py-3 text-sm transition focus:border-slate-300 focus:outline-none"
+                      className="mt-2 w-full rounded-2xl border border-slate-200/80 bg-white px-4 py-3 text-sm transition focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"
                       placeholder="XXXX-XXXX-XXXX"
                       name="cardCode"
                     />
@@ -138,13 +138,23 @@ export default async function SellPage({ params }: SellPageProps) {
                   <label className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">
                     Upload card image
                   </label>
-                  <div className="mt-2 rounded-2xl border border-dashed border-slate-200/90 bg-slate-50/80 p-4 transition hover:border-slate-300">
+                  <label className="group mt-2 flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-200/90 bg-slate-50/60 px-4 py-6 transition-all hover:border-sky-400 hover:bg-sky-50/50 hover:shadow-md hover:shadow-sky-100/50">
+                    <svg className="h-8 w-8 text-slate-300 transition group-hover:text-sky-500 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                    </svg>
+                    <span className="text-sm font-medium text-slate-400 transition group-hover:text-sky-600">
+                      Click to upload or drag image here
+                    </span>
+                    <span className="text-xs text-slate-300 transition group-hover:text-sky-400">
+                      PNG, JPG, WEBP up to 5MB
+                    </span>
                     <input
                       type="file"
                       name="cardImage"
-                      className="w-full text-sm text-slate-500"
+                      accept="image/*"
+                      className="hidden"
                     />
-                  </div>
+                  </label>
                 </div>
                 <div className="rounded-2xl border border-slate-200/70 bg-slate-50/80 p-4 text-sm text-slate-600">
                   Estimated payout (for $100):{" "}
@@ -161,7 +171,7 @@ export default async function SellPage({ params }: SellPageProps) {
                     <select
                       name="payoutMethod"
                       defaultValue={hasSavedPaymentDetails ? "SAVED" : "MTN_MOMO"}
-                      className="mt-2 w-full rounded-2xl border border-slate-200/80 bg-white px-4 py-3 text-sm"
+                      className="mt-2 w-full rounded-2xl border border-slate-200/80 bg-white px-4 py-3 text-sm transition focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"
                     >
                       {hasSavedPaymentDetails ? (
                         <option value="SAVED">Use saved payout details</option>
@@ -178,7 +188,7 @@ export default async function SellPage({ params }: SellPageProps) {
                     </label>
                     <input
                       name="payoutDetails"
-                      className="mt-2 w-full rounded-2xl border border-slate-200/80 bg-white px-4 py-3 text-sm"
+                      className="mt-2 w-full rounded-2xl border border-slate-200/80 bg-white px-4 py-3 text-sm transition focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"
                       placeholder="Crypto address / MoMo"
                     />
                   </div>
@@ -195,7 +205,7 @@ export default async function SellPage({ params }: SellPageProps) {
                     No saved payout details yet. <Link href="/profile" className="font-semibold text-slate-900">Add details in profile</Link>.
                   </div>
                 )}
-                <button className="w-full rounded-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 transition hover:-translate-y-0.5">
+                <button className="w-full rounded-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 transition hover:-translate-y-0.5 hover:shadow-slate-900/30 active:translate-y-0 active:shadow-sm">
                   Submit for review
                 </button>
               </form>

@@ -7,7 +7,7 @@ type StatCardProps = {
 
 export default function StatCard({ label, value, delta, note }: StatCardProps) {
   return (
-    <div className="rounded-2xl border border-slate-200/70 bg-white/80 p-5 shadow-sm">
+    <div className="rounded-2xl border border-slate-200/70 bg-white/80 p-5 shadow-sm transition hover:shadow-md hover:-translate-y-0.5">
       <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
         {label}
       </p>
