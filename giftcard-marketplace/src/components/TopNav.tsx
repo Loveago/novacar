@@ -8,6 +8,7 @@ const navLinks = [
   { label: "FAQ", href: "/faq" },
   { label: "Contact", href: "/contact" },
   { label: "Dashboard", href: "/dashboard" },
+  { label: "Support", href: "/support" },
 ];
 
 export default async function TopNav() {
@@ -41,9 +42,14 @@ export default async function TopNav() {
             </Link>
           ))}
           {isAdmin ? (
-            <Link href="/admin" className="transition hover:text-slate-900">
-              Admin
-            </Link>
+            <>
+              <Link href="/admin" className="transition hover:text-slate-900">
+                Admin
+              </Link>
+              <Link href="/admin/messages" className="transition hover:text-slate-900">
+                Messages
+              </Link>
+            </>
           ) : null}
         </nav>
         <div className="flex items-center gap-3">

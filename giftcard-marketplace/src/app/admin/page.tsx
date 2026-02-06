@@ -21,6 +21,11 @@ const adminActions = [
     detail: "Monitor user accounts and KYC status.",
     href: "/admin/users",
   },
+  {
+    title: "Messages",
+    detail: "View and reply to user support messages.",
+    href: "/admin/messages",
+  },
 ];
 
 export default async function AdminPage() {
