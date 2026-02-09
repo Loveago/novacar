@@ -107,7 +107,12 @@ export default async function AdminSubmissionsPage() {
                 </div>
 
                 {submission.cardImagePreview ? (
-                  <div className="flex flex-1 items-center gap-4 rounded-2xl border border-white/70 bg-white/80 p-3 text-xs text-slate-500">
+                  <a
+                    href={submission.cardImagePreview.src}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex flex-1 items-center gap-4 rounded-2xl border border-white/70 bg-white/80 p-3 text-xs text-slate-500 transition hover:border-sky-200 hover:bg-white"
+                  >
                     <div className="relative h-16 w-16 overflow-hidden rounded-xl border border-slate-100 bg-slate-50">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
@@ -122,7 +127,7 @@ export default async function AdminSubmissionsPage() {
                         {submission.cardImagePreview.filename}
                       </p>
                     </div>
-                  </div>
+                  </a>
                 ) : (
                   <div className="text-xs text-slate-400">
                     No image uploaded

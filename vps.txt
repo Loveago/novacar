@@ -165,7 +165,7 @@ sudo ufw status
    npm install
    npx prisma migrate deploy
    npm run build
-   pm2 restart novacar
+   pm2 restart novacar --update-env
    ```
 2. If you modify Prisma schema, rerun `npx prisma migrate deploy` before restarting the app.
 
