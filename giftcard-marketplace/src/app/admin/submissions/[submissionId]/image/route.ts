@@ -1,6 +1,6 @@
 import { readFile } from "fs/promises";
 import path from "path";
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/guards";
 
@@ -12,12 +12,12 @@ const mimeMap: Record<string, string> = {
 };
 
 export async function GET(
-  _request: Request,
-  { params }: { params: { submissionId: string } }
+  _request: NextRequest,
+  { params }: { params: Promise<{ submissionId: string }> }
 ) {
   await requireAdmin();
 
-  const { submissionId } = params;
+  const { submissionId } = await params;
   if (!submissionId) {
     return NextResponse.json({ error: "Missing submission id" }, { status: 400 });
   }
