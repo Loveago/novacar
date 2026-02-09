@@ -41,7 +41,7 @@ export default async function AdminSubmissionsPage() {
         }
       }
 
-      let cardImagePreview: { src: string; filename: string } | null = null;
+      let cardImagePreview: { src: string; filename: string; downloadUrl: string } | null = null;
       if (submission.cardImagePath) {
         try {
           const buffer = await readFile(submission.cardImagePath);
@@ -49,6 +49,7 @@ export default async function AdminSubmissionsPage() {
           cardImagePreview = {
             src: `data:image/${ext};base64,${buffer.toString("base64")}`,
             filename: path.basename(submission.cardImagePath),
+            downloadUrl: `/admin/submissions/${submission.id}/image`,
           };
         } catch (error) {
           cardImagePreview = null;
@@ -108,7 +109,7 @@ export default async function AdminSubmissionsPage() {
 
                 {submission.cardImagePreview ? (
                   <a
-                    href={submission.cardImagePreview.src}
+                    href={submission.cardImagePreview.downloadUrl}
                     target="_blank"
                     rel="noreferrer"
                     className="flex flex-1 items-center gap-4 rounded-2xl border border-white/70 bg-white/80 p-3 text-xs text-slate-500 transition hover:border-sky-200 hover:bg-white"
