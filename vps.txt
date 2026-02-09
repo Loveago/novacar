@@ -3,8 +3,9 @@
 These steps assume you have:
 - A VPS (Ubuntu 22.04+ recommended).
 - SSH access (username/password or SSH key).
-- A Cloudflare-managed domain (e.g., `novacard.com`).
+- The domain **mk.elitebytegh.uk** managed in Cloudflare.
 - PostgreSQL database credentials (managed DB or self-hosted).
+- Repo path: `/var/www/novacar`, with the Next.js app in `/var/www/novacar/giftcard-marketplace`. **Do not run npm commands from `/` or `/root`.**
 
 ---
 ## 1. Prepare the VPS
@@ -31,47 +32,54 @@ These steps assume you have:
 
 ---
 ## 2. Clone and configure the project
-1. **Clone the repo**
+1. **Clone the repo into /var/www (recommended)**
    ```bash
+   sudo mkdir -p /var/www
+   sudo chown -R $USER:$USER /var/www
+   cd /var/www
    git clone https://github.com/Loveago/novacar.git
    cd novacar
    ```
-2. **Create `.env`** with production values:
+   Notes:
+   - All Next.js work happens inside `/var/www/novacar/giftcard-marketplace`.
+   - Working in `/var/www/novacar` alone will not expose `package.json`, so npm install will fail.
+2. **Create `.env`** with production values (update placeholders):
    ```bash
    cat <<'EOF' > .env
-   DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DB?schema=public"
-   AUTH_SECRET="your-long-random-string"
-   CARD_SECRET="your-other-long-string"
-   NEXTAUTH_URL="https://novacard.com"
+   DATABASE_URL="postgresql://amak:Loverboy888@localhost:5432/amak"
+   AUTH_SECRET="your-long-random-strinssafasfvwef3r3rg"
+   CARD_SECRET="your-other-long-strr3r23er23r2r23ring"
+   NEXTAUTH_URL="https://mk.elitebytegh.uk"
    RESEND_API_KEY="re_your_resend_api_key"
-   EMAIL_FROM="NovaCard <noreply@yourdomain.com>"
+   EMAIL_FROM="NovaCard <noreply@mk.elitebytegh.uk>"
    AUTO_SEED="false"
-   # Optional (only if AUTO_SEED=true)
-   # SEED_ADMIN_EMAIL="admin@novacard.com"
-   # SEED_ADMIN_PASSWORD="Admin123!"
-   # SEED_SELLER_EMAIL="seller@novacard.com"
-   # SEED_SELLER_PASSWORD="Seller123!"
+   SEED_ADMIN_EMAIL="admin@mk.elitebytegh.uk"
+   SEED_ADMIN_PASSWORD="Admin123!"
    EOF
    ```
-3. **Install packages**
+3. **Install packages** (in `giftcard-marketplace`)
    ```bash
+   cd /var/www/novacar/giftcard-marketplace
    npm install
    ```
-4. **Apply migrations and seed (if needed)**
+4. **Apply migrations and (optionally) seed**
    ```bash
+   cd /var/www/novacar/giftcard-marketplace
    npx prisma migrate deploy
-   # Option A (recommended): one-time seed
-   node prisma/seed.cjs
-   # Option B: set AUTO_SEED=true in .env and restart the app once
+   npx prisma generate
+   node prisma/seed.cjs   # optional one-time seed
    ```
 5. **Build the app**
    ```bash
+   cd /var/www/novacar/giftcard-marketplace
    npm run build
    ```
 6. **Start with PM2**
    ```bash
+   cd /var/www/novacar/giftcard-marketplace
    pm2 start npm --name novacar -- start
    pm2 save
+   pm2 startup
    ```
    - App now runs on the default Next.js port (3000).
    - Enable boot on restart:
@@ -86,7 +94,7 @@ These steps assume you have:
    sudo tee /etc/nginx/sites-available/novacar <<'EOF'
    server {
      listen 80;
-     server_name novacard.com www.novacard.com;
+     server_name mk.elitebytegh.uk www.mk.elitebytegh.uk;
 
      location / {
        proxy_pass http://127.0.0.1:3000;
@@ -112,10 +120,10 @@ These steps assume you have:
 ## 4. Point Cloudflare DNS to the VPS
 1. Log in to Cloudflare → your domain → **DNS**.
 2. Add an `A` record:
-   - Name: `@` (or `novacard.com`)
+   - Name: `@` (root domain mk.elitebytegh.uk)
    - IPv4: your VPS IP (e.g., `203.0.113.45`)
    - Proxy status: **Proxied** (orange cloud) if you want Cloudflare caching/SSL; **DNS only** if you prefer direct access.
-3. (Optional) Add `www` CNAME pointing to `@`.
+3. Add `www` CNAME pointing to `@` (hostname: `www`, target: `mk.elitebytegh.uk`).
 
 Recommended Cloudflare settings:
 - **SSL/TLS mode:** Full (Strict)
@@ -129,9 +137,9 @@ If Cloudflare is set to **Proxied**, make sure SSL/TLS mode is **Full**. If you 
    ```bash
    sudo apt install -y certbot python3-certbot-nginx
    ```
-2. Run:
+2. Run (include both root and www):
    ```bash
-   sudo certbot --nginx -d novacard.com -d www.novacard.com
+   sudo certbot --nginx -d mk.elitebytegh.uk -d www.mk.elitebytegh.uk
    ```
 3. Certbot auto-renews; verify with `sudo systemctl status certbot.timer`.
 
@@ -152,7 +160,7 @@ sudo ufw status
 ## 7. Deploying updates
 1. SSH into the server and pull latest changes:
    ```bash
-   cd ~/novacar
+   cd /var/www/novacar/giftcard-marketplace
    git pull origin main
    npm install
    npx prisma migrate deploy
@@ -170,6 +178,6 @@ sudo ufw status
 Auth-specific checks:
 - **Admin login not working**: make sure the DB was migrated + seeded.
 - **If using AUTO_SEED**: set `AUTO_SEED=true`, restart once, log in, then set it back to `false`.
-- **If auth errors about host**: ensure `NEXTAUTH_URL` matches your public domain (e.g. `https://novacard.com`).
+- **If auth errors about host**: ensure `NEXTAUTH_URL` matches your public domain (must be `https://mk.elitebytegh.uk`).
 
 That’s it! Your Next.js marketplace now runs on your VPS with a Cloudflare-backed domain.

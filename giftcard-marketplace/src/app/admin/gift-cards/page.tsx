@@ -85,17 +85,19 @@ export default async function AdminGiftCardsPage() {
                 className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm"
               />
             </div>
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-[1fr_auto]">
               <input
                 name="trend"
                 placeholder="Trend (e.g. +2.1%)"
                 className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm"
               />
-              <input
-                name="imageUrl"
-                placeholder="Image URL (optional)"
-                className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm"
-              />
+              <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm">
+                <input
+                  name="imageUrl"
+                  placeholder="Image URL (optional)"
+                  className="w-full border-none bg-transparent p-0 text-sm focus:outline-none"
+                />
+              </div>
             </div>
             <div className="grid gap-4 md:grid-cols-2">
               <input
@@ -203,11 +205,22 @@ export default async function AdminGiftCardsPage() {
                     defaultValue={card.category ?? ""}
                     className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm"
                   />
-                  <input
-                    name="imageUrl"
-                    defaultValue={card.imagePath}
-                    className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm md:col-span-2"
-                  />
+                  <div className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 md:col-span-2 md:grid-cols-[1fr_auto]">
+                    <input
+                      name="imageUrl"
+                      defaultValue={card.imagePath}
+                      className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm"
+                    />
+                    <div className="flex items-center justify-center rounded-2xl border border-slate-100 bg-slate-50 p-3">
+                      <Image
+                        src={card.imagePath}
+                        alt={`${card.name} preview`}
+                        width={64}
+                        height={64}
+                        className="h-12 w-12 rounded-xl object-contain"
+                      />
+                    </div>
+                  </div>
                   <input
                     type="file"
                     name="imageFile"
