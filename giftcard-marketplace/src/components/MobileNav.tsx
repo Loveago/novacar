@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -15,6 +16,7 @@ type MobileNavProps = {
 export default function MobileNav({ links, userName, isLoggedIn }: MobileNavProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
 
   // Close menu on route change
   useEffect(() => {
@@ -33,42 +35,20 @@ export default function MobileNav({ links, userName, isLoggedIn }: MobileNavProp
     };
   }, [open]);
 
-  return (
-    <div className="lg:hidden">
-      {/* Hamburger button */}
-      <button
-        onClick={() => setOpen((prev) => !prev)}
-        className="relative z-50 flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:border-slate-300"
-        aria-label={open ? "Close menu" : "Open menu"}
-      >
-        <div className="flex w-5 flex-col items-center gap-[5px]">
-          <span
-            className={`block h-[2px] w-5 rounded-full bg-current transition-all duration-300 ${
-              open ? "translate-y-[7px] rotate-45" : ""
-            }`}
-          />
-          <span
-            className={`block h-[2px] w-5 rounded-full bg-current transition-all duration-300 ${
-              open ? "opacity-0" : ""
-            }`}
-          />
-          <span
-            className={`block h-[2px] w-5 rounded-full bg-current transition-all duration-300 ${
-              open ? "-translate-y-[7px] -rotate-45" : ""
-            }`}
-          />
-        </div>
-      </button>
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-      {/* Full-screen panel */}
+  const panel = open ? (
+    <div className="fixed inset-0 z-50">
       <div
-        className={`fixed inset-0 z-50 flex h-full w-full flex-col overflow-y-auto bg-white transition-transform duration-300 ease-out ${
-          open ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
+        className="absolute inset-0 bg-slate-900/50"
+        onClick={() => setOpen(false)}
+      />
+      <div className="absolute inset-0 flex h-full w-full flex-col overflow-y-auto bg-white">
         <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-blue-700 text-xs font-semibold text-white">
+            <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-slate-900 text-xs font-semibold text-white">
               NC
             </div>
             <div>
@@ -149,6 +129,37 @@ export default function MobileNav({ links, userName, isLoggedIn }: MobileNavProp
           )}
         </div>
       </div>
+    </div>
+  ) : null;
+
+  return (
+    <div className="lg:hidden">
+      {/* Hamburger button */}
+      <button
+        onClick={() => setOpen((prev) => !prev)}
+        className="relative z-50 flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:border-slate-300"
+        aria-label={open ? "Close menu" : "Open menu"}
+      >
+        <div className="flex w-5 flex-col items-center gap-[5px]">
+          <span
+            className={`block h-[2px] w-5 rounded-full bg-current transition-all duration-300 ${
+              open ? "translate-y-[7px] rotate-45" : ""
+            }`}
+          />
+          <span
+            className={`block h-[2px] w-5 rounded-full bg-current transition-all duration-300 ${
+              open ? "opacity-0" : ""
+            }`}
+          />
+          <span
+            className={`block h-[2px] w-5 rounded-full bg-current transition-all duration-300 ${
+              open ? "-translate-y-[7px] -rotate-45" : ""
+            }`}
+          />
+        </div>
+      </button>
+
+      {mounted ? createPortal(panel, document.body) : null}
     </div>
   );
 }
