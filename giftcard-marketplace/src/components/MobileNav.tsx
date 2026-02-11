@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -12,6 +12,8 @@ type MobileNavProps = {
   userName?: string | null;
   isLoggedIn: boolean;
 };
+
+const tapHighlightStyle: CSSProperties = { WebkitTapHighlightColor: "transparent" };
 
 export default function MobileNav({ links, userName, isLoggedIn }: MobileNavProps) {
   const [open, setOpen] = useState(false);
@@ -71,6 +73,7 @@ export default function MobileNav({ links, userName, isLoggedIn }: MobileNavProp
                 onClick={() => setOpen(false)}
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-white/80 transition hover:border-white/40 hover:text-white"
                 aria-label="Close menu"
+                style={tapHighlightStyle}
               >
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -94,11 +97,12 @@ export default function MobileNav({ links, userName, isLoggedIn }: MobileNavProp
                     <Link
                       key={link.href}
                       href={link.href}
-                      className={`group flex items-center justify-between rounded-2xl border px-4 py-3 text-base font-semibold transition-all duration-200 ${
+                      className={`group relative flex w-full items-center justify-between overflow-hidden rounded-2xl border px-4 py-3 text-base font-semibold transition-all duration-200 ${
                         active
-                          ? "border-white bg-white text-slate-900 shadow-xl shadow-white/30"
-                          : "border-white/20 bg-white/5 text-white/80 hover:border-white/40 hover:bg-white/10"
+                          ? "border-white/50 bg-white/15 text-white shadow-[0_15px_45px_-20px_rgba(255,255,255,0.8)]"
+                          : "border-white/15 bg-white/5 text-white/85 hover:border-white/35 hover:bg-white/10 active:bg-white/15"
                       }`}
+                      style={tapHighlightStyle}
                     >
                       <span>{link.label}</span>
                       <svg
@@ -124,11 +128,15 @@ export default function MobileNav({ links, userName, isLoggedIn }: MobileNavProp
                   <Link
                     href="/dashboard"
                     className="flex w-full items-center justify-center rounded-full border border-white/30 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/60 hover:bg-white/10"
+                    style={tapHighlightStyle}
                   >
                     My account
                   </Link>
                   <form action="/api/auth/signout" method="POST">
-                    <button className="w-full rounded-full border border-white/30 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/60 hover:bg-white/10">
+                    <button
+                      className="w-full rounded-full border border-white/30 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/60 hover:bg-white/10"
+                      style={tapHighlightStyle}
+                    >
                       Sign out
                     </button>
                   </form>
@@ -138,12 +146,14 @@ export default function MobileNav({ links, userName, isLoggedIn }: MobileNavProp
                   <Link
                     href="/auth/login"
                     className="flex w-full items-center justify-center rounded-full border border-white/30 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/60 hover:bg-white/10"
+                    style={tapHighlightStyle}
                   >
                     Log in
                   </Link>
                   <Link
                     href="/auth/register"
                     className="flex w-full items-center justify-center rounded-full bg-white px-4 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-white/30 transition hover:-translate-y-0.5"
+                    style={tapHighlightStyle}
                   >
                     Create account
                   </Link>
@@ -163,6 +173,7 @@ export default function MobileNav({ links, userName, isLoggedIn }: MobileNavProp
         onClick={() => setOpen((prev) => !prev)}
         className="relative z-50 flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:border-slate-300"
         aria-label={open ? "Close menu" : "Open menu"}
+        style={tapHighlightStyle}
       >
         <div className="flex w-5 flex-col items-center gap-[5px]">
           <span
