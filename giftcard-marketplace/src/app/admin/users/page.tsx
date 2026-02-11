@@ -9,23 +9,23 @@ export default async function AdminUsersPage() {
 
   return (
     <SiteShell>
-      <div className="mx-auto w-full max-w-6xl px-6 pb-24 pt-12">
-        <div className="rounded-3xl border border-slate-200/70 bg-white/90 p-8">
+      <div className="mx-auto w-full max-w-6xl px-4 pb-16 pt-8 sm:px-6 sm:pb-24 sm:pt-12">
+        <div className="rounded-2xl border border-slate-200/70 bg-white/90 p-4 sm:rounded-3xl sm:p-8">
           <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
             Admin users
           </p>
-          <h1 className="mt-3 text-3xl font-semibold text-slate-900">
+          <h1 className="mt-2 text-2xl font-semibold text-slate-900 sm:mt-3 sm:text-3xl">
             Manage users
           </h1>
           <p className="mt-2 text-sm text-slate-500">
             Track seller volume, status, and verification level.
           </p>
 
-          <div className="mt-8 space-y-6">
+          <div className="mt-6 space-y-4 sm:mt-8 sm:space-y-6">
             {users.map((user) => (
               <div
                 key={user.id}
-                className="rounded-3xl border border-slate-200/70 bg-slate-50/80 p-5"
+                className="rounded-2xl border border-slate-200/70 bg-slate-50/80 p-4 sm:rounded-3xl sm:p-5"
               >
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div>

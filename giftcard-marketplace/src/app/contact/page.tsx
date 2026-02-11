@@ -18,13 +18,13 @@ const contactOptions = [
 export default function ContactPage() {
   return (
     <SiteShell>
-      <div className="mx-auto w-full max-w-5xl px-6 pb-24 pt-12">
-        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="rounded-3xl border border-slate-200/70 bg-white/90 p-8">
+      <div className="mx-auto w-full max-w-5xl px-4 pb-16 pt-8 sm:px-6 sm:pb-24 sm:pt-12">
+        <div className="grid gap-5 sm:gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="rounded-2xl border border-slate-200/70 bg-white/90 p-5 sm:rounded-3xl sm:p-8">
             <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
               Contact
             </p>
-            <h1 className="mt-3 text-3xl font-semibold text-slate-900">
+            <h1 className="mt-2 text-2xl font-semibold text-slate-900 sm:mt-3 sm:text-3xl">
               Talk to the NovaCard team
             </h1>
             <p className="mt-3 text-sm text-slate-500">

@@ -5,13 +5,13 @@ import { registerUser } from "@/app/actions/auth";
 export default function RegisterPage() {
   return (
     <SiteShell>
-      <div className="mx-auto w-full max-w-5xl px-6 pb-24 pt-12">
-        <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr]">
-          <div className="rounded-3xl border border-slate-200/70 bg-white/90 p-8 shadow-xl shadow-slate-200/40">
+      <div className="mx-auto w-full max-w-5xl px-4 pb-16 pt-8 sm:px-6 sm:pb-24 sm:pt-12">
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-[1fr_0.9fr]">
+          <div className="rounded-2xl border border-slate-200/70 bg-white/90 p-5 shadow-xl shadow-slate-200/40 sm:rounded-3xl sm:p-8">
             <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
               Seller onboarding
             </p>
-            <h1 className="mt-3 text-3xl font-semibold text-slate-900">
+            <h1 className="mt-2 text-2xl font-semibold text-slate-900 sm:mt-3 sm:text-3xl">
               Create your NovaCard account
             </h1>
             <p className="mt-2 text-sm text-slate-500">
@@ -56,7 +56,7 @@ export default function RegisterPage() {
               </Link>
             </div>
           </div>
-          <div className="relative overflow-hidden rounded-3xl border border-slate-800/60 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-8 text-white shadow-xl">
+          <div className="relative overflow-hidden rounded-2xl border border-slate-800/60 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-5 text-white shadow-xl sm:rounded-3xl sm:p-8">
             <div className="pointer-events-none absolute -top-20 right-0 h-40 w-40 rounded-full bg-sky-500/20 blur-2xl" />
             <div className="pointer-events-none absolute bottom-0 left-0 h-32 w-32 rounded-full bg-emerald-400/20 blur-2xl" />
             <div className="relative">

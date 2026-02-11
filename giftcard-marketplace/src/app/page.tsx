@@ -21,17 +21,17 @@ export default async function Home() {
 
   return (
     <SiteShell>
-      <div className="mx-auto w-full max-w-6xl px-6 pb-24 pt-10">
-        <section className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+      <div className="mx-auto w-full max-w-6xl px-4 pb-16 pt-6 sm:px-6 sm:pb-24 sm:pt-10">
+        <section className="grid items-center gap-6 sm:gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-white/60 bg-gradient-to-r from-sky-200 via-cyan-100 to-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-slate-900 shadow-sm">
               Live marketplace
               <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
             </div>
-            <h1 className="mt-6 text-4xl font-semibold leading-tight text-slate-900 md:text-5xl">
+            <h1 className="mt-4 text-2xl font-semibold leading-tight text-slate-900 sm:mt-6 sm:text-4xl md:text-5xl">
               A fintech marketplace to liquidate gift cards in minutes.
             </h1>
-            <p className="mt-4 max-w-xl text-lg text-slate-600">
+            <p className="mt-3 max-w-xl text-sm text-slate-600 sm:mt-4 sm:text-lg">
               Discover live buy rates, submit cards securely, and track payouts
               inside a platform inspired by modern crypto P2P desks.
             </p>
@@ -88,8 +88,8 @@ export default async function Home() {
                   key={item}
                   className="flex items-center justify-between rounded-2xl border border-slate-200/60 bg-white/90 px-4 py-3"
                 >
-                  <span>{item}</span>
-                  <span className="text-xs uppercase tracking-[0.2em] text-slate-400">
+                  <span className="flex-1 min-w-0 truncate text-xs sm:text-sm">{item}</span>
+                  <span className="shrink-0 text-xs uppercase tracking-[0.2em] text-slate-400">
                     Live
                   </span>
                 </div>
@@ -98,13 +98,13 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="mt-16 grid gap-6 md:grid-cols-3" id="rates">
+        <section className="mt-10 grid gap-4 sm:mt-16 sm:gap-6 md:grid-cols-3" id="rates">
           {dashboardStats.map((stat) => (
             <StatCard key={stat.label} {...stat} />
           ))}
         </section>
 
-        <section className="mt-16 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+        <section className="mt-10 grid gap-6 sm:mt-16 sm:gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="rounded-3xl border border-slate-200/70 bg-white/90 p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -198,7 +198,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="mt-16" id="marketplace">
+        <section className="mt-10 sm:mt-16" id="marketplace">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
@@ -219,14 +219,14 @@ export default async function Home() {
               ))}
             </div>
           </div>
-          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-6 grid gap-4 sm:mt-8 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
             {marketplaceCards.map((card) => (
               <MarketplaceCard key={card.slug} card={card} />
             ))}
           </div>
         </section>
 
-        <section className="mt-20 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+        <section className="mt-12 grid gap-6 sm:mt-20 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="rounded-3xl border border-slate-200/70 bg-white/90 p-6">
             <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
               Seller journey
@@ -264,11 +264,11 @@ export default async function Home() {
               ))}
             </div>
           </div>
-          <div className="rounded-3xl border border-slate-200/70 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 p-8 text-white">
+          <div className="rounded-3xl border border-slate-200/70 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 p-6 text-white sm:p-8">
             <p className="text-xs uppercase tracking-[0.3em] text-slate-300">
               Enterprise ready
             </p>
-            <h2 className="mt-3 text-3xl font-semibold">
+            <h2 className="mt-3 text-2xl font-semibold sm:text-3xl">
               Built with compliance, liquidity, and speed.
             </h2>
             <p className="mt-4 text-sm text-slate-300">

@@ -41,8 +41,8 @@ export default async function SellPage({ params }: SellPageProps) {
       <div className="relative overflow-hidden">
         <div className="pointer-events-none absolute -top-24 right-0 h-72 w-72 rounded-full bg-sky-200/60 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-32 left-0 h-80 w-80 rounded-full bg-emerald-200/50 blur-3xl" />
-        <div className="mx-auto w-full max-w-6xl px-6 pb-24 pt-12">
-          <div className="flex flex-wrap items-center justify-between gap-6">
+        <div className="mx-auto w-full max-w-6xl px-4 pb-16 pt-8 sm:px-6 sm:pb-24 sm:pt-12">
+          <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-6">
             <div className="flex items-center gap-4">
               <div className="relative h-14 w-14 overflow-hidden rounded-2xl border border-white/70 bg-white shadow-lg">
                 <Image
@@ -57,7 +57,7 @@ export default async function SellPage({ params }: SellPageProps) {
                 <p className="text-xs uppercase tracking-[0.4em] text-slate-400">
                   Sell {card.name}
                 </p>
-                <h1 className="mt-2 text-3xl font-semibold text-slate-900 sm:text-4xl">
+                <h1 className="mt-1 text-2xl font-semibold text-slate-900 sm:mt-2 sm:text-3xl md:text-4xl">
                   Secure payout submission
                 </h1>
                 <p className="mt-2 text-sm text-slate-500">
@@ -65,7 +65,7 @@ export default async function SellPage({ params }: SellPageProps) {
                 </p>
               </div>
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
               <div className="rounded-2xl border border-slate-200/70 bg-white/90 px-4 py-3 text-sm text-slate-600 shadow-sm">
                 <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
                   Live rate
@@ -93,8 +93,8 @@ export default async function SellPage({ params }: SellPageProps) {
             </div>
           </div>
 
-          <div className="mt-10 grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
-            <div className="rounded-[32px] border border-slate-200/70 bg-white/90 p-8 shadow-xl">
+          <div className="mt-6 grid gap-6 sm:mt-10 sm:gap-8 lg:grid-cols-[1.2fr_0.8fr]">
+            <div className="rounded-2xl border border-slate-200/70 bg-white/90 p-5 shadow-xl sm:rounded-[32px] sm:p-8">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
@@ -211,7 +211,7 @@ export default async function SellPage({ params }: SellPageProps) {
               </form>
             </div>
 
-            <div className="relative overflow-hidden rounded-[32px] border border-slate-800/60 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-8 text-white shadow-xl">
+            <div className="relative overflow-hidden rounded-2xl border border-slate-800/60 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-5 text-white shadow-xl sm:rounded-[32px] sm:p-8">
               <div className="pointer-events-none absolute -top-20 right-0 h-40 w-40 rounded-full bg-sky-500/20 blur-2xl" />
               <div className="pointer-events-none absolute bottom-0 left-0 h-32 w-32 rounded-full bg-emerald-400/20 blur-2xl" />
               <div className="relative">

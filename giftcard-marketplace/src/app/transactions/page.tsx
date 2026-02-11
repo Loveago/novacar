@@ -14,12 +14,12 @@ export default async function TransactionsPage() {
 
   return (
     <SiteShell>
-      <div className="mx-auto w-full max-w-5xl px-6 pb-24 pt-12">
-        <div className="rounded-3xl border border-slate-200/70 bg-white/90 p-8">
+      <div className="mx-auto w-full max-w-5xl px-4 pb-16 pt-8 sm:px-6 sm:pb-24 sm:pt-12">
+        <div className="rounded-2xl border border-slate-200/70 bg-white/90 p-4 sm:rounded-3xl sm:p-8">
           <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
             Transactions
           </p>
-          <h1 className="mt-3 text-3xl font-semibold text-slate-900">
+          <h1 className="mt-2 text-2xl font-semibold text-slate-900 sm:mt-3 sm:text-3xl">
             Transaction history
           </h1>
           <p className="mt-2 text-sm text-slate-500">
@@ -27,12 +27,12 @@ export default async function TransactionsPage() {
           </p>
         </div>
 
-        <div className="mt-8 space-y-4">
+        <div className="mt-6 space-y-3 sm:mt-8 sm:space-y-4">
           {submissions.length ? (
             submissions.map((submission) => (
               <div
                 key={submission.id}
-                className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200/70 bg-white/90 px-5 py-4"
+                className="flex flex-col gap-3 rounded-2xl border border-slate-200/70 bg-white/90 p-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4 sm:px-5"
               >
                 <div>
                   <p className="text-sm font-semibold text-slate-900">

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { logoutUser } from "@/app/actions/auth";
 import { auth } from "@/lib/auth";
+import MobileNav from "./MobileNav";
 
 const publicLinks = [
   { label: "Marketplace", href: "/marketplace" },
@@ -9,11 +10,16 @@ const publicLinks = [
 
 const userLinks = [
   { label: "Dashboard", href: "/dashboard" },
+  { label: "Transactions", href: "/transactions" },
+  { label: "Profile", href: "/profile" },
   { label: "Support", href: "/support" },
 ];
 
 const adminLinks = [
   { label: "Admin", href: "/admin" },
+  { label: "Gift Cards", href: "/admin/gift-cards" },
+  { label: "Submissions", href: "/admin/submissions" },
+  { label: "Users", href: "/admin/users" },
   { label: "Messages", href: "/admin/messages" },
 ];
 
@@ -21,22 +27,30 @@ export default async function TopNav() {
   const session = await auth();
   const isAdmin = session?.user?.role === "ADMIN";
 
+  const mobileLinks = [
+    ...publicLinks,
+    ...(session ? userLinks : []),
+    ...(isAdmin ? adminLinks : []),
+  ];
+
   return (
     <header className="sticky top-0 z-30 border-b border-slate-200/60 bg-white/70 backdrop-blur">
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
-        <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-blue-700 text-white font-semibold">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
+        <Link href="/" className="flex items-center gap-2 sm:gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-sky-500 to-blue-700 text-sm text-white font-semibold sm:h-10 sm:w-10 sm:rounded-2xl">
             NC
           </div>
           <div>
-            <p className="text-sm uppercase tracking-[0.2em] text-slate-500">
+            <p className="text-xs uppercase tracking-[0.2em] text-slate-500 sm:text-sm">
               Novacard
             </p>
-            <p className="font-[var(--font-space-grotesk)] text-lg font-semibold">
+            <p className="font-[var(--font-space-grotesk)] text-base font-semibold sm:text-lg">
               Market
             </p>
           </div>
         </Link>
+
+        {/* Desktop nav */}
         <nav className="hidden items-center gap-5 text-sm font-medium text-slate-600 lg:flex">
           {publicLinks.map((link) => (
             <Link key={link.href} href={link.href} className="transition hover:text-slate-900">
@@ -44,21 +58,23 @@ export default async function TopNav() {
             </Link>
           ))}
           {session
-            ? userLinks.map((link) => (
+            ? userLinks.slice(0, 2).map((link) => (
                 <Link key={link.href} href={link.href} className="transition hover:text-slate-900">
                   {link.label}
                 </Link>
               ))
             : null}
           {isAdmin
-            ? adminLinks.map((link) => (
+            ? adminLinks.slice(0, 2).map((link) => (
                 <Link key={link.href} href={link.href} className="transition hover:text-slate-900">
                   {link.label}
                 </Link>
               ))
             : null}
         </nav>
-        <div className="flex items-center gap-3">
+
+        {/* Desktop right actions */}
+        <div className="hidden items-center gap-3 lg:flex">
           {session ? (
             <>
               <Link
@@ -74,20 +90,29 @@ export default async function TopNav() {
               </form>
             </>
           ) : (
-            <Link
-              href="/auth/login"
-              className="hidden rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:text-slate-900 sm:inline-flex"
-            >
-              Log in
-            </Link>
+            <>
+              <Link
+                href="/auth/login"
+                className="rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:text-slate-900"
+              >
+                Log in
+              </Link>
+              <Link
+                href="/auth/register"
+                className="rounded-full border border-white/60 bg-gradient-to-r from-cyan-100 via-sky-200 to-indigo-200 px-5 py-2 text-sm font-semibold text-slate-900 shadow-lg shadow-sky-200/60 transition hover:-translate-y-0.5 hover:shadow-sky-300"
+              >
+                Create account
+              </Link>
+            </>
           )}
-          <Link
-            href={session ? "/dashboard" : "/auth/register"}
-            className="rounded-full border border-white/60 bg-gradient-to-r from-cyan-100 via-sky-200 to-indigo-200 px-5 py-2 text-sm font-semibold text-slate-900 shadow-lg shadow-sky-200/60 transition hover:-translate-y-0.5 hover:shadow-sky-300"
-          >
-            {session ? "Open dashboard" : "Create account"}
-          </Link>
         </div>
+
+        {/* Mobile hamburger */}
+        <MobileNav
+          links={mobileLinks}
+          userName={session?.user?.name ?? session?.user?.email ?? null}
+          isLoggedIn={!!session}
+        />
       </div>
     </header>
   );

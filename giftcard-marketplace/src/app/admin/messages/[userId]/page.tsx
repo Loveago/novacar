@@ -47,9 +47,9 @@ export default async function AdminConversationPage({
 
   return (
     <SiteShell>
-      <div className="mx-auto w-full max-w-2xl px-6 pb-24 pt-12">
-        <div className="rounded-3xl border border-slate-200/70 bg-white/90 p-8">
-          <div className="flex items-center justify-between">
+      <div className="mx-auto w-full max-w-2xl px-4 pb-16 pt-8 sm:px-6 sm:pb-24 sm:pt-12">
+        <div className="rounded-2xl border border-slate-200/70 bg-white/90 p-4 sm:rounded-3xl sm:p-8">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
                 Conversation
@@ -67,7 +67,7 @@ export default async function AdminConversationPage({
             </Link>
           </div>
 
-          <div className="mt-6 max-h-[420px] space-y-3 overflow-y-auto rounded-2xl border border-slate-200/70 bg-slate-50/80 p-4">
+          <div className="mt-4 max-h-[50vh] space-y-3 overflow-y-auto rounded-2xl border border-slate-200/70 bg-slate-50/80 p-3 sm:mt-6 sm:max-h-[420px] sm:p-4">
             {messages.length === 0 && (
               <p className="py-8 text-center text-sm text-slate-400">
                 No messages in this conversation.
@@ -97,7 +97,7 @@ export default async function AdminConversationPage({
             })}
           </div>
 
-          <form className="mt-4 flex gap-3" action={sendAdminReply}>
+          <form className="mt-3 flex gap-2 sm:mt-4 sm:gap-3" action={sendAdminReply}>
             <input type="hidden" name="userId" value={userId} />
             <input
               name="body"

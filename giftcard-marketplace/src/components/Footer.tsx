@@ -1,12 +1,12 @@
 export default function Footer() {
   return (
-    <footer className="border-t border-slate-200/70 bg-white/80">
-      <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 py-10 md:grid-cols-[1.4fr_1fr_1fr]">
+    <footer className="border-t border-slate-200/70 bg-white/80 mt-auto">
+      <div className="mx-auto grid w-full max-w-6xl gap-6 px-4 py-8 sm:gap-8 sm:px-6 sm:py-10 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <p className="text-xs uppercase tracking-[0.3em] text-slate-500">
             Novacard Market
           </p>
-          <p className="mt-3 text-lg font-semibold text-slate-900">
+          <p className="mt-2 text-base font-semibold text-slate-900 sm:mt-3 sm:text-lg">
             Liquidate gift cards with bank-grade speed and insight.
           </p>
           <p className="mt-3 text-sm text-slate-500">

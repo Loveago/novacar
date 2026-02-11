@@ -15,17 +15,17 @@ export default async function MarketplacePage() {
   return (
     <SiteShell>
       <div className="market-glow">
-        <div className="mx-auto w-full max-w-6xl px-6 pb-24 pt-10">
-          <section className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="mx-auto w-full max-w-6xl px-4 pb-16 pt-6 sm:px-6 sm:pb-24 sm:pt-10">
+          <section className="grid items-center gap-6 sm:gap-10 lg:grid-cols-[1.1fr_0.9fr]">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-white/60 bg-gradient-to-r from-sky-200 via-cyan-100 to-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-slate-900 shadow-sm">
                 Live marketplace
                 <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
               </div>
-              <h1 className="mt-6 text-4xl font-semibold leading-tight text-slate-900 md:text-5xl">
+              <h1 className="mt-4 text-2xl font-semibold leading-tight text-slate-900 sm:mt-6 sm:text-4xl md:text-5xl">
                 Trade gift cards like a modern P2P desk.
               </h1>
-              <p className="mt-4 max-w-xl text-lg text-slate-600">
+              <p className="mt-3 max-w-xl text-sm text-slate-600 sm:mt-4 sm:text-lg">
                 Track live buy rates, lock in quotes, and submit cards with a
                 market-driven workflow built for speed.
               </p>
@@ -43,7 +43,7 @@ export default async function MarketplacePage() {
                   View dashboard
                 </Link>
               </div>
-              <div className="mt-8 grid gap-3 text-sm text-slate-500 sm:grid-cols-3">
+              <div className="mt-6 grid gap-3 text-sm text-slate-500 grid-cols-1 sm:mt-8 sm:grid-cols-3">
                 {
                   [
                     {
@@ -145,7 +145,7 @@ export default async function MarketplacePage() {
 
           <section
             id="rates"
-            className="mt-14 flex flex-wrap items-end justify-between gap-4"
+            className="mt-8 flex flex-wrap items-end justify-between gap-4 sm:mt-14"
           >
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
@@ -168,7 +168,7 @@ export default async function MarketplacePage() {
           </section>
 
           {marketplaceCards.length ? (
-            <section className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <section className="mt-6 grid gap-4 sm:mt-8 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
               {marketplaceCards.map((card) => (
                 <MarketplaceCard key={card.id} card={card} />
               ))}
@@ -194,7 +194,7 @@ export default async function MarketplacePage() {
             </section>
           )}
 
-          <section className="mt-16 grid gap-6 lg:grid-cols-[1fr_1fr]">
+          <section className="mt-10 grid gap-6 sm:mt-16 lg:grid-cols-[1fr_1fr]">
             <div className="rounded-3xl border border-slate-200/70 bg-white/90 p-6">
               <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
                 Trading desk tools
@@ -219,11 +219,11 @@ export default async function MarketplacePage() {
                 ))}
               </div>
             </div>
-            <div className="rounded-3xl border border-slate-200/70 bg-slate-900 p-8 text-white">
+            <div className="rounded-3xl border border-slate-200/70 bg-slate-900 p-6 text-white sm:p-8">
               <p className="text-xs uppercase tracking-[0.3em] text-slate-300">
                 Market conditions
               </p>
-              <h2 className="mt-3 text-3xl font-semibold">Premium buy rates</h2>
+              <h2 className="mt-3 text-2xl font-semibold sm:text-3xl">Premium buy rates</h2>
               <p className="mt-3 text-sm text-slate-200">
                 NovaCard continuously matches sell orders with the highest
                 liquidity pools, keeping rates competitive.

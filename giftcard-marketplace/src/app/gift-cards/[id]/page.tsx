@@ -21,9 +21,9 @@ export default async function GiftCardPage({ params }: GiftCardPageProps) {
 
   return (
     <SiteShell>
-      <div className="mx-auto w-full max-w-5xl px-6 pb-24 pt-12">
-        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="rounded-3xl border border-slate-200/70 bg-white/90 p-8">
+      <div className="mx-auto w-full max-w-5xl px-4 pb-16 pt-8 sm:px-6 sm:pb-24 sm:pt-12">
+        <div className="grid gap-5 sm:gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="rounded-2xl border border-slate-200/70 bg-white/90 p-5 sm:rounded-3xl sm:p-8">
             <div className="flex items-center gap-4">
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-50">
                 <Image
@@ -38,7 +38,7 @@ export default async function GiftCardPage({ params }: GiftCardPageProps) {
                 <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
                   Gift card
                 </p>
-                <h1 className="text-3xl font-semibold text-slate-900">
+                <h1 className="text-2xl font-semibold text-slate-900 sm:text-3xl">
                   {card.name}
                 </h1>
               </div>
@@ -85,7 +85,7 @@ export default async function GiftCardPage({ params }: GiftCardPageProps) {
               </Link>
             </div>
           </div>
-          <div className="rounded-3xl border border-slate-200/70 bg-slate-900 p-8 text-white">
+          <div className="rounded-2xl border border-slate-200/70 bg-slate-900 p-5 text-white sm:rounded-3xl sm:p-8">
             <p className="text-xs uppercase tracking-[0.3em] text-slate-300">
               Verification flow
             </p>

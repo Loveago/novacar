@@ -11,12 +11,12 @@ export default async function ForgotPasswordPage({
 
   return (
     <SiteShell>
-      <div className="mx-auto w-full max-w-md px-6 pb-24 pt-12">
-        <div className="rounded-3xl border border-slate-200/70 bg-white/90 p-8 shadow-xl shadow-slate-200/40">
+      <div className="mx-auto w-full max-w-md px-4 pb-16 pt-8 sm:px-6 sm:pb-24 sm:pt-12">
+        <div className="rounded-2xl border border-slate-200/70 bg-white/90 p-5 shadow-xl shadow-slate-200/40 sm:rounded-3xl sm:p-8">
           <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
             Account recovery
           </p>
-          <h1 className="mt-3 text-3xl font-semibold text-slate-900">
+          <h1 className="mt-2 text-2xl font-semibold text-slate-900 sm:mt-3 sm:text-3xl">
             Forgot password
           </h1>
           <p className="mt-2 text-sm text-slate-500">

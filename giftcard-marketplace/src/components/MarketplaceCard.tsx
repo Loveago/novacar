@@ -11,7 +11,7 @@ export default function MarketplaceCard({
   const tags = [card.category, card.region].filter(Boolean) as string[];
 
   return (
-    <div className="group flex h-full flex-col rounded-3xl border border-white/60 bg-gradient-to-b from-white/95 via-white/90 to-cyan-50/70 p-5 shadow-[0_25px_60px_-30px_rgba(15,23,42,0.45)] transition hover:-translate-y-1 hover:shadow-[0_30px_70px_-35px_rgba(15,23,42,0.55)]">
+    <div className="group flex h-full flex-col rounded-2xl border border-white/60 bg-gradient-to-b from-white/95 via-white/90 to-cyan-50/70 p-4 shadow-[0_25px_60px_-30px_rgba(15,23,42,0.45)] transition hover:-translate-y-1 hover:shadow-[0_30px_70px_-35px_rgba(15,23,42,0.55)] sm:rounded-3xl sm:p-5">
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-50">
@@ -68,7 +68,7 @@ export default function MarketplaceCard({
               </span>
             ) : null}
           </div>
-          <p className="mt-3 text-3xl font-semibold text-slate-900">
+          <p className="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl">
             {card.rate}
           </p>
           <p className="mt-1 text-xs text-slate-500">Auto-updated seconds ago</p>
