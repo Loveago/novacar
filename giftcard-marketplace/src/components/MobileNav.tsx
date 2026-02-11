@@ -83,13 +83,13 @@ export default function MobileNav({ links, userName, isLoggedIn }: MobileNavProp
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`flex items-center justify-between border-b border-slate-100 px-4 py-3 text-base font-semibold transition last:border-b-0 ${
+                  className={`flex w-full items-center border-b border-slate-100 px-4 py-3 text-base font-semibold transition last:border-b-0 ${
                     active
-                      ? "bg-slate-900 text-white"
+                      ? "bg-gradient-to-r from-slate-900 to-slate-800 text-white shadow-inner shadow-slate-900/20"
                       : "text-slate-700 hover:bg-slate-50"
                   }`}
                 >
-                  {link.label}
+                  <span>{link.label}</span>
                 </Link>
               );
             })}
