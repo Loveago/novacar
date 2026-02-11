@@ -6,6 +6,7 @@ import MarketplaceCard from "@/components/MarketplaceCard";
 import { categoryFilters, dashboardStats } from "@/data/marketplace";
 import { toMarketplaceCard } from "@/lib/marketplace";
 import { fetchActiveGiftCards } from "@/lib/giftCards";
+import { auth } from "@/lib/auth";
 import type { MarketplaceCardData } from "@/types/marketplace";
 
 const activityFeed = [
@@ -18,6 +19,8 @@ const activityFeed = [
 export default async function Home() {
   const giftCards = await fetchActiveGiftCards();
   const marketplaceCards: MarketplaceCardData[] = giftCards.map(toMarketplaceCard);
+  const session = await auth();
+  const startSellingHref = session ? "/marketplace" : "/auth/register";
 
   return (
     <SiteShell>
@@ -37,7 +40,7 @@ export default async function Home() {
             </p>
             <div className="mt-6 flex flex-wrap gap-4">
               <Link
-                href="/auth/register"
+                href={startSellingHref}
                 className="rounded-full border border-white/70 bg-gradient-to-r from-sky-500 via-indigo-500 to-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/40 transition hover:-translate-y-0.5 hover:shadow-sky-500/60"
               >
                 Start selling

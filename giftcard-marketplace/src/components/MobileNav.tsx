@@ -63,14 +63,14 @@ export default function MobileNav({ links, userName, isLoggedIn }: MobileNavProp
       {/* Overlay */}
       {open && (
         <div
-          className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm"
+          className="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-sm"
           onClick={() => setOpen(false)}
         />
       )}
 
-      {/* Slide-in panel */}
+      {/* Full-screen panel */}
       <div
-        className={`fixed right-0 top-0 z-40 flex h-full w-72 flex-col bg-white shadow-2xl transition-transform duration-300 ease-out ${
+        className={`fixed inset-0 z-50 flex h-full w-full flex-col bg-white transition-transform duration-300 ease-out ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
