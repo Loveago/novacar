@@ -39,98 +39,122 @@ export default function MobileNav({ links, userName, isLoggedIn }: MobileNavProp
     setMounted(true);
   }, []);
 
-  const panel = open ? (
-    <div className="fixed inset-0 z-50">
-      <div
-        className="absolute inset-0 bg-slate-900/50"
-        onClick={() => setOpen(false)}
-      />
-      <div className="absolute inset-0 flex h-full w-full flex-col overflow-y-auto bg-white">
-        <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-slate-900 text-xs font-semibold text-white">
-              NC
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-[0.25em] text-slate-400">Novacard</p>
-              <p className="text-sm font-semibold text-slate-900">Market</p>
-            </div>
-          </div>
-          <button
+  const panel = mounted
+    ? createPortal(
+        <div
+          className={`fixed inset-0 z-50 transition duration-300 ${
+            open ? "pointer-events-auto" : "pointer-events-none"
+          }`}
+        >
+          <div
+            className={`absolute inset-0 bg-slate-950/70 backdrop-blur-sm transition-opacity duration-300 ${
+              open ? "opacity-100" : "opacity-0"
+            }`}
             onClick={() => setOpen(false)}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-slate-300 hover:text-slate-700"
-            aria-label="Close menu"
+          />
+          <div
+            className={`absolute inset-0 flex h-full w-full flex-col overflow-y-auto bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white shadow-[0_30px_120px_rgba(2,6,23,0.6)] transition-transform duration-300 ease-out ${
+              open ? "translate-x-0" : "translate-x-full"
+            }`}
           >
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
+            <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-xs font-semibold text-white">
+                  NC
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.35em] text-white/60">Novacard</p>
+                  <p className="text-base font-semibold tracking-wide">Market</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setOpen(false)}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-white/80 transition hover:border-white/40 hover:text-white"
+                aria-label="Close menu"
+              >
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
 
-        {isLoggedIn && userName && (
-          <div className="border-b border-slate-200 px-5 py-4">
-            <p className="text-xs uppercase tracking-[0.25em] text-slate-400">Signed in as</p>
-            <p className="mt-1 text-sm font-semibold text-slate-900 truncate">{userName}</p>
+            {isLoggedIn && userName && (
+              <div className="border-b border-white/10 px-5 py-4">
+                <p className="text-[10px] uppercase tracking-[0.35em] text-white/60">Signed in as</p>
+                <p className="mt-1 text-sm font-semibold text-white">{userName}</p>
+              </div>
+            )}
+
+            <nav className="flex-1 px-5 py-6">
+              <p className="text-[11px] uppercase tracking-[0.35em] text-white/60">Navigation</p>
+              <div className="mt-4 space-y-3">
+                {links.map((link) => {
+                  const active = pathname === link.href;
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className={`group flex items-center justify-between rounded-2xl border px-4 py-3 text-base font-semibold transition-all duration-200 ${
+                        active
+                          ? "border-white bg-white text-slate-900 shadow-xl shadow-white/30"
+                          : "border-white/20 bg-white/5 text-white/80 hover:border-white/40 hover:bg-white/10"
+                      }`}
+                    >
+                      <span>{link.label}</span>
+                      <svg
+                        className={`h-4 w-4 transition-transform duration-200 ${
+                          active ? "text-slate-900" : "text-white/60 group-hover:translate-x-1"
+                        }`}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                      </svg>
+                    </Link>
+                  );
+                })}
+              </div>
+            </nav>
+
+            <div className="border-t border-white/10 px-5 py-6 space-y-3">
+              {isLoggedIn ? (
+                <>
+                  <Link
+                    href="/dashboard"
+                    className="flex w-full items-center justify-center rounded-full border border-white/30 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/60 hover:bg-white/10"
+                  >
+                    My account
+                  </Link>
+                  <form action="/api/auth/signout" method="POST">
+                    <button className="w-full rounded-full border border-white/30 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/60 hover:bg-white/10">
+                      Sign out
+                    </button>
+                  </form>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/auth/login"
+                    className="flex w-full items-center justify-center rounded-full border border-white/30 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/60 hover:bg-white/10"
+                  >
+                    Log in
+                  </Link>
+                  <Link
+                    href="/auth/register"
+                    className="flex w-full items-center justify-center rounded-full bg-white px-4 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-white/30 transition hover:-translate-y-0.5"
+                  >
+                    Create account
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
-        )}
-
-        <nav className="flex-1 px-5 py-6">
-          <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Navigation</p>
-          <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-white">
-            {links.map((link) => {
-              const active = pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`flex w-full items-center border-b border-slate-100 px-4 py-3 text-base font-semibold transition last:border-b-0 ${
-                    active
-                      ? "bg-gradient-to-r from-slate-900 to-slate-800 text-white shadow-inner shadow-slate-900/20"
-                      : "text-slate-700 hover:bg-slate-50"
-                  }`}
-                >
-                  <span>{link.label}</span>
-                </Link>
-              );
-            })}
-          </div>
-        </nav>
-
-        <div className="border-t border-slate-200 px-5 py-5 space-y-2">
-          {isLoggedIn ? (
-            <>
-              <Link
-                href="/dashboard"
-                className="flex w-full items-center justify-center rounded-full border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300"
-              >
-                My account
-              </Link>
-              <form action="/api/auth/signout" method="POST">
-                <button className="w-full rounded-full border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300">
-                  Sign out
-                </button>
-              </form>
-            </>
-          ) : (
-            <>
-              <Link
-                href="/auth/login"
-                className="flex w-full items-center justify-center rounded-full border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300"
-              >
-                Log in
-              </Link>
-              <Link
-                href="/auth/register"
-                className="flex w-full items-center justify-center rounded-full bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/20"
-              >
-                Create account
-              </Link>
-            </>
-          )}
-        </div>
-      </div>
-    </div>
-  ) : null;
+        </div>,
+        document.body
+      )
+    : null;
 
   return (
     <div className="lg:hidden">
@@ -159,7 +183,7 @@ export default function MobileNav({ links, userName, isLoggedIn }: MobileNavProp
         </div>
       </button>
 
-      {mounted ? createPortal(panel, document.body) : null}
+      {panel}
     </div>
   );
 }
