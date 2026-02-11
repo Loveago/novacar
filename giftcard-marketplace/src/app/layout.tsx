@@ -16,9 +16,9 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "NovaCard Market | Gift Card Buyback",
+  title: "Joy Exchange | Gift Card Buyback",
   description:
-    "A modern gift card buy-back marketplace with real-time rates, dashboards, and managed submissions.",
+    "Joy Exchange is a modern gift card desk with real-time rates, smart dashboards, and managed submissions.",
 };
 
 export default function RootLayout({

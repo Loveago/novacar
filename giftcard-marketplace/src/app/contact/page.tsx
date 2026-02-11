@@ -25,7 +25,7 @@ export default function ContactPage() {
               Contact
             </p>
             <h1 className="mt-2 text-2xl font-semibold text-slate-900 sm:mt-3 sm:text-3xl">
-              Talk to the NovaCard team
+              Talk to the Joy Exchange desk
             </h1>
             <p className="mt-3 text-sm text-slate-500">
               Reach out for account verification, liquidity partnerships, or
@@ -72,10 +72,10 @@ export default function ContactPage() {
                 Support channels
               </p>
               <p className="mt-3 text-sm text-slate-200">
-                support@novacard.com · +233 50 112 9032
+                support@joyexchange.io · +233 50 112 9032
               </p>
               <p className="mt-2 text-sm text-slate-200">
-                Telegram: @novacardmarket
+                Telegram: <a className="underline-offset-2 hover:underline" href="https://t.me/Mr_EL_elite" target="_blank" rel="noreferrer">@Mr_EL_elite</a>
               </p>
             </div>
           </div>

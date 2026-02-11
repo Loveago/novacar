@@ -12,7 +12,7 @@ export default function RegisterPage() {
               Seller onboarding
             </p>
             <h1 className="mt-2 text-2xl font-semibold text-slate-900 sm:mt-3 sm:text-3xl">
-              Create your NovaCard account
+              Create your Joy Exchange account
             </h1>
             <p className="mt-2 text-sm text-slate-500">
               Start selling gift cards with verified rates and instant payouts.

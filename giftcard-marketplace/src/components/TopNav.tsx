@@ -37,15 +37,15 @@ export default async function TopNav() {
     <header className="sticky top-0 z-30 border-b border-slate-200/60 bg-white/70 backdrop-blur">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
         <Link href="/" className="flex items-center gap-2 sm:gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-sky-500 to-blue-700 text-sm text-white font-semibold sm:h-10 sm:w-10 sm:rounded-2xl">
-            NC
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 via-sky-500 to-indigo-600 text-sm font-semibold text-white shadow-lg shadow-emerald-500/30 sm:h-10 sm:w-10 sm:rounded-2xl">
+            JE
           </div>
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-slate-500 sm:text-sm">
-              Novacard
+            <p className="text-xs uppercase tracking-[0.25em] text-slate-500 sm:text-sm">
+              Joy Exchange
             </p>
-            <p className="font-[var(--font-space-grotesk)] text-base font-semibold sm:text-lg">
-              Market
+            <p className="font-[var(--font-space-grotesk)] text-base font-semibold text-slate-900 sm:text-lg">
+              Gift Market
             </p>
           </div>
         </Link>

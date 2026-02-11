@@ -275,7 +275,7 @@ export default async function Home() {
               Built with compliance, liquidity, and speed.
             </h2>
             <p className="mt-4 text-sm text-slate-300">
-              NovaCard combines automated risk scoring, multi-corridor payouts,
+              Joy Exchange combines automated risk scoring, multi-corridor payouts,
               and a transparent order book so sellers always know the best rate.
             </p>
             <div className="mt-6 flex flex-wrap gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-slate-300">

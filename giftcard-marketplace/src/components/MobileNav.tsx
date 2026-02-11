@@ -62,10 +62,10 @@ export default function MobileNav({ links, userName, isLoggedIn }: MobileNavProp
             <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-xs font-semibold text-white">
-                  NC
+                  JE
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.35em] text-white/60">Novacard</p>
+                  <p className="text-[10px] uppercase tracking-[0.35em] text-white/60">Joy Exchange</p>
                   <p className="text-base font-semibold tracking-wide">Market</p>
                 </div>
               </div>
