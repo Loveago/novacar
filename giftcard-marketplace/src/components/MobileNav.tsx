@@ -2,6 +2,7 @@
 
 import { useState, useEffect, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -19,11 +20,13 @@ export default function MobileNav({ links, userName, isLoggedIn }: MobileNavProp
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+  const [prevPath, setPrevPath] = useState(pathname);
 
   // Close menu on route change
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
+  if (prevPath !== pathname) {
+    setPrevPath(pathname);
+    if (open) setOpen(false);
+  }
 
   // Prevent body scroll when menu is open
   useEffect(() => {
@@ -37,8 +40,10 @@ export default function MobileNav({ links, userName, isLoggedIn }: MobileNavProp
     };
   }, [open]);
 
+  // Track client mount — wrapped in requestAnimationFrame to avoid sync setState in effect
   useEffect(() => {
-    setMounted(true);
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
   }, []);
 
   const panel = mounted
@@ -61,8 +66,15 @@ export default function MobileNav({ links, userName, isLoggedIn }: MobileNavProp
           >
             <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-xs font-semibold text-white">
-                  JE
+                <div className="relative h-10 w-10 overflow-hidden rounded-2xl bg-white/10 ring-1 ring-white/20">
+                  <Image
+                    src="/brand-logo.png"
+                    alt="Joy Exchange logo"
+                    fill
+                    sizes="40px"
+                    className="object-cover"
+                    priority
+                  />
                 </div>
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.35em] text-white/60">Joy Exchange</p>

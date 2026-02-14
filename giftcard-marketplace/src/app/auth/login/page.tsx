@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useActionState, Suspense } from "react";
 import { loginUser } from "@/app/actions/auth";
+import PasswordField from "@/components/PasswordField";
 
 function LoginForm() {
   const searchParams = useSearchParams();
@@ -63,10 +64,9 @@ function LoginForm() {
               required
               autoComplete="email"
             />
-            <input
+            <PasswordField
               className="w-full rounded-2xl border border-slate-200/80 bg-white px-4 py-3 text-sm transition focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"
               placeholder="Password"
-              type="password"
               name="password"
               required
               autoComplete="current-password"

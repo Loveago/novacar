@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { logoutUser } from "@/app/actions/auth";
 import { auth } from "@/lib/auth";
@@ -37,8 +38,15 @@ export default async function TopNav() {
     <header className="sticky top-0 z-30 border-b border-slate-200/60 bg-white/70 backdrop-blur">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
         <Link href="/" className="flex items-center gap-2 sm:gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 via-sky-500 to-indigo-600 text-sm font-semibold text-white shadow-lg shadow-emerald-500/30 sm:h-10 sm:w-10 sm:rounded-2xl">
-            JE
+          <div className="relative h-9 w-9 overflow-hidden rounded-xl shadow-lg shadow-sky-300/30 sm:h-10 sm:w-10 sm:rounded-2xl">
+            <Image
+              src="/brand-logo.png"
+              alt="Joy Exchange logo"
+              fill
+              sizes="40px"
+              className="object-cover"
+              priority
+            />
           </div>
           <div>
             <p className="text-xs uppercase tracking-[0.25em] text-slate-500 sm:text-sm">

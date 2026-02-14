@@ -1,0 +1,185 @@
+# Deploying Joy Exchange with Docker on a VPS (Beginner Friendly)
+
+These steps assume:
+- Fresh Ubuntu 22.04/24.04 VPS
+- Domain: joy-exchange.com (optional but recommended)
+- Git + Docker installed via instructions below
+
+---
+## 1. Update system & install Docker
+```bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y ca-certificates curl gnupg git
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/docker.gpg
+sudo sh -c 'echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/trusted.gpg.d/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list'
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+sudo systemctl enable --now docker
+```
+
+(Optional) allow your user to run Docker without sudo:
+```bash
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+---
+## 2. Clone the repo
+```bash
+cd /var/www
+sudo mkdir -p novacar && sudo chown -R $USER:$USER novacar
+cd novacar
+git clone https://github.com/Loveago/novacar.git giftcard-marketplace
+cd giftcard-marketplace
+```
+
+---
+## 3. Create `.env`
+```bash
+cat <<'EOF' > .env
+DATABASE_URL="postgresql://joyexchange:Loverboy888@postgres:5432/joyexchange"
+AUTH_SECRET="your-long-random-strinssafasfvwef3r3rg"
+CARD_SECRET="your-other-long-strr3r23er23r2r23ring"
+NEXTAUTH_URL="https://joy-exchange.com"
+RESEND_API_KEY="re_cPRPAQgm_EuYBEhUpJKVemz2PcuSWAhhZ"
+EMAIL_FROM='Joy Exchange <noreply@joy-exchange.com>'
+AUTO_SEED="true"
+SEED_ADMIN_EMAIL="admin@joy-exchange.com"
+SEED_ADMIN_PASSWORD="Eliteguy1122@"
+EOF
+```
+
+Set `AUTO_SEED` back to `false` later if you only want seeding once.
+
+---
+## 4. Create `docker-compose.yml`
+```bash
+cat <<'EOF' > docker-compose.yml
+services:
+  postgres:
+    image: postgres:16
+    container_name: joyexchange-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: joyexchange
+      POSTGRES_PASSWORD: Loverboy888
+      POSTGRES_DB: joyexchange
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - joyexchange-net
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: joyexchange-app
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+    networks:
+      - joyexchange-net
+
+volumes:
+  pgdata:
+
+networks:
+  joyexchange-net:
+EOF
+```
+
+---
+## 5. Create `Dockerfile`
+```bash
+cat <<'EOF' > Dockerfile
+FROM node:20-alpine as deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm install --frozen-lockfile
+
+FROM node:20-alpine as builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run db:generate || true
+RUN npm run build
+
+FROM node:20-alpine as runner
+WORKDIR /app
+ENV NODE_ENV=production
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/prisma ./prisma
+EXPOSE 3000
+CMD ["npm", "run", "start"]
+EOF
+```
+*(If you don’t have `npm run db:generate`, replace with `npx prisma generate`.)*
+
+---
+## 6. Build & run containers
+```bash
+docker compose build
+docker compose up -d
+```
+- App runs on port 3000 ( http://your_vps_ip:3000 )
+- Check logs: `docker compose logs -f app`
+
+---
+## 7. Reverse proxy (optional, recommended)
+Install Nginx and proxy port 80/443 to Docker app:
+```bash
+sudo apt install -y nginx
+sudo tee /etc/nginx/sites-available/joy-exchange <<'CONF'
+server {
+  listen 80;
+  server_name joy-exchange.com www.joy-exchange.com;
+
+  location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_cache_bypass $http_upgrade;
+  }
+}
+CONF
+
+sudo ln -s /etc/nginx/sites-available/joy-exchange /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+---
+## 8. HTTPS (Certbot)
+```bash
+sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d joy-exchange.com -d www.joy-exchange.com
+```
+
+---
+## 9. Managing containers
+```bash
+docker compose ps               # show status
+docker compose logs -f app       # follow app logs
+docker compose restart app       # restart app only
+docker compose down              # stop everything
+```
+
+---
+## 10. Updating code
+```bash
+cd /var/www/novacar/giftcard-marketplace
+git pull origin main
+docker compose build
+docker compose up -d
+```
+
+That’s it—Docker keeps the app + Postgres isolated, and you only need to manage `docker compose up -d` on the VPS.

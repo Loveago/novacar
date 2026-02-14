@@ -1,5 +1,6 @@
 import Link from "next/link";
 import SiteShell from "@/components/SiteShell";
+import PasswordField from "@/components/PasswordField";
 import { registerUser } from "@/app/actions/auth";
 
 export default function RegisterPage() {
@@ -37,10 +38,9 @@ export default function RegisterPage() {
                 type="email"
                 required
               />
-              <input
+              <PasswordField
                 className="w-full rounded-2xl border border-slate-200/80 bg-white px-4 py-3 text-sm transition focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"
                 placeholder="Password"
-                type="password"
                 name="password"
                 required
                 autoComplete="new-password"

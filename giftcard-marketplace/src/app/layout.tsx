@@ -19,6 +19,11 @@ export const metadata: Metadata = {
   title: "Joy Exchange | Gift Card Buyback",
   description:
     "Joy Exchange is a modern gift card desk with real-time rates, smart dashboards, and managed submissions.",
+  icons: {
+    icon: "/brand-logo.png",
+    shortcut: "/brand-logo.png",
+    apple: "/brand-logo.png",
+  },
 };
 
 export default function RootLayout({

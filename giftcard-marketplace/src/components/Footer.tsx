@@ -27,7 +27,7 @@ export default function Footer() {
           <p className="text-sm font-semibold text-slate-900">Support</p>
           <ul className="mt-3 space-y-2 text-sm text-slate-500">
             <li>help@joyexchange.io</li>
-            <li>+233 50 112 9032</li>
+            <li>+233549806359</li>
             <li>Telegram: @joyexchange</li>
             <li>Terms & privacy</li>
           </ul>

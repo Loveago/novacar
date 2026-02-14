@@ -72,7 +72,7 @@ export default function ContactPage() {
                 Support channels
               </p>
               <p className="mt-3 text-sm text-slate-200">
-                support@joyexchange.io · +233 50 112 9032
+                support@joyexchange.io · +233549806359
               </p>
               <p className="mt-2 text-sm text-slate-200">
                 Telegram: <a className="underline-offset-2 hover:underline" href="https://t.me/Mr_EL_elite" target="_blank" rel="noreferrer">@Mr_EL_elite</a>
