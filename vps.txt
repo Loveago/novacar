@@ -1,153 +1,157 @@
-# Deploying NovaCard Marketplace on a VPS (with Cloudflare Domain)
+# Deploying Joy Exchange Marketplace on a VPS (clean, safe, copy-paste)
 
-These steps assume you have:
-- A VPS (Ubuntu 22.04+ recommended).
-- SSH access (username/password or SSH key).
-- The domain **mk.elitebytegh.uk** managed in Cloudflare.
-- PostgreSQL database credentials (managed DB or self-hosted).
-- Repo path: `/var/www/novacar`, with the Next.js app in `/var/www/novacar/giftcard-marketplace`. **Do not run npm commands from `/` or `/root`.**
-
----
-## 1. Prepare the VPS
-1. **Log in via SSH**
-   ```bash
-   ssh username@your_vps_ip
-   ```
-2. **Update packages and install dependencies**
-   ```bash
-   sudo apt update && sudo apt upgrade -y
-   sudo apt install -y git curl build-essential nginx
-   ```
-3. **Install Node.js LTS (via nvm)**
-   ```bash
-   curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-   source ~/.bashrc
-   nvm install 20
-   nvm use 20
-   ```
-4. **Install PM2 (process manager)**
-   ```bash
-   npm install -g pm2
-   ```
+These steps assume:
+- Ubuntu 22.04/24.04.
+- SSH access.
+- Domain: **joy-exchange.com** (Cloudflare or any DNS provider).
+- Repo path: `/var/www/novacar/giftcard-marketplace`.
 
 ---
-## 2. Clone and configure the project
-1. **Clone the repo into /var/www (recommended)**
-   ```bash
-   sudo mkdir -p /var/www
-   sudo chown -R $USER:$USER /var/www
-   cd /var/www
-   git clone https://github.com/Loveago/novacar.git
-   cd novacar
-   ```
-   Notes:
-   - All Next.js work happens inside `/var/www/novacar/giftcard-marketplace`.
-   - Working in `/var/www/novacar` alone will not expose `package.json`, so npm install will fail.
-2. **Create `.env`** with production values (update placeholders):
-   ```bash
-   cat <<'EOF' > .env
-   DATABASE_URL="postgresql://amak:Loverboy888@localhost:5432/amak"
-   AUTH_SECRET="your-long-random-strinssafasfvwef3r3rg"
-   CARD_SECRET="your-other-long-strr3r23er23r2r23ring"
-   NEXTAUTH_URL="https://mk.elitebytegh.uk"
-   RESEND_API_KEY="re_your_resend_api_key"
-   EMAIL_FROM="NovaCard <noreply@mk.elitebytegh.uk>"
-   AUTO_SEED="false"
-   SEED_ADMIN_EMAIL="admin@mk.elitebytegh.uk"
-   SEED_ADMIN_PASSWORD="Admin123!"
-   EOF
-   ```
-3. **Install packages** (in `giftcard-marketplace`)
-   ```bash
-   cd /var/www/novacar/giftcard-marketplace
-   npm install
-   ```
-4. **Apply migrations and (optionally) seed**
-   ```bash
-   cd /var/www/novacar/giftcard-marketplace
-   npx prisma migrate deploy
-   npx prisma generate
-   node prisma/seed.cjs   # optional one-time seed
-   ```
-5. **Build the app**
-   ```bash
-   cd /var/www/novacar/giftcard-marketplace
-   npm run build
-   ```
-6. **Start with PM2**
-   ```bash
-   cd /var/www/novacar/giftcard-marketplace
-   pm2 start npm --name novacar -- start
-   pm2 save
-   pm2 startup
-   ```
-   - App now runs on the default Next.js port (3000).
-   - Enable boot on restart:
-     ```bash
-     pm2 startup
-     ```
+## 0. (Optional) Add 1GB swap for low-memory VPS
+```bash
+sudo swapoff -a
+sudo rm -f /swapfile
+sudo dd if=/dev/zero of=/swapfile bs=1M count=1024 status=progress
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+```
 
 ---
-## 3. Configure Nginx reverse proxy
-1. **Create an Nginx site file**
-   ```bash
-   sudo tee /etc/nginx/sites-available/novacar <<'EOF'
-   server {
-     listen 80;
-     server_name mk.elitebytegh.uk www.mk.elitebytegh.uk;
-
-     location / {
-       proxy_pass http://127.0.0.1:3000;
-       proxy_http_version 1.1;
-       proxy_set_header Upgrade $http_upgrade;
-       proxy_set_header Connection 'upgrade';
-       proxy_set_header Host $host;
-       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-       proxy_set_header X-Forwarded-Proto $scheme;
-       proxy_cache_bypass $http_upgrade;
-     }
-   }
-   EOF
-   ```
-2. **Enable the site and reload Nginx**
-   ```bash
-   sudo ln -s /etc/nginx/sites-available/novacar /etc/nginx/sites-enabled/
-   sudo nginx -t
-   sudo systemctl reload nginx
-   ```
+## 1. Prepare the VPS (official packages only)
+```bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y git curl ca-certificates gnupg build-essential nginx ufw
+```
 
 ---
-## 4. Point Cloudflare DNS to the VPS
-1. Log in to Cloudflare → your domain → **DNS**.
-2. Add an `A` record:
-   - Name: `@` (root domain mk.elitebytegh.uk)
-   - IPv4: your VPS IP (e.g., `203.0.113.45`)
-   - Proxy status: **Proxied** (orange cloud) if you want Cloudflare caching/SSL; **DNS only** if you prefer direct access.
-3. Add `www` CNAME pointing to `@` (hostname: `www`, target: `mk.elitebytegh.uk`).
-
-Recommended Cloudflare settings:
-- **SSL/TLS mode:** Full (Strict)
-- **Always Use HTTPS:** On
-- **Automatic HTTPS Rewrites:** On
+## 2. Install Node.js LTS (official NodeSource)
+```bash
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt install -y nodejs
+node -v && npm -v
+```
 
 ---
-## 5. Enable HTTPS (recommended)
-If Cloudflare is set to **Proxied**, make sure SSL/TLS mode is **Full**. If you prefer end-to-end TLS with your server:
-1. Install certbot:
-   ```bash
-   sudo apt install -y certbot python3-certbot-nginx
-   ```
-2. Run (include both root and www):
-   ```bash
-   sudo certbot --nginx -d mk.elitebytegh.uk -d www.mk.elitebytegh.uk
-   ```
-3. Certbot auto-renews; verify with `sudo systemctl status certbot.timer`.
-
-If you keep Cloudflare **Proxied** and want strict origin security without Let’s Encrypt, you can also use a **Cloudflare Origin Certificate** (installed on the VPS) + SSL/TLS set to **Full (Strict)**.
+## 3. Install PM2
+```bash
+sudo npm install -g pm2
+```
 
 ---
-## 6. Firewall (recommended)
-Allow only SSH, HTTP, and HTTPS:
+## 4. Install and configure PostgreSQL (local DB)
+```bash
+sudo apt install -y postgresql postgresql-contrib
+sudo systemctl enable --now postgresql
+```
+
+Create a database + user (change password):
+```bash
+sudo -u postgres psql <<'SQL'
+CREATE USER joyexchange WITH PASSWORD 'Loverboy888';
+CREATE DATABASE joyexchange OWNER joyexchange;
+ALTER USER joyexchange CREATEDB;
+SQL
+```
+
+---
+## 5. Clone the repo
+```bash
+sudo mkdir -p /var/www/novacar
+sudo chown -R $USER:$USER /var/www/novacar
+cd /var/www/novacar
+git clone https://github.com/Loveago/novacar.git giftcard-marketplace
+cd /var/www/novacar/giftcard-marketplace
+```
+
+---
+## 6. Create `.env` (in /var/www/novacar/giftcard-marketplace)
+Generate secrets (optional):
+```bash
+openssl rand -hex 32
+```
+
+Create the file:
+```bash
+cat <<'EOF' > .env
+DATABASE_URL="postgresql://joyexchange:Loverboy888@localhost:5432/joyexchange"
+AUTH_SECRET="your-long-random-strinssafasfvwef3r3rg"
+CARD_SECRET="your-other-long-strr3r23er23r2r23ring"
+NEXTAUTH_URL="https://joy-exchange.com"
+RESEND_API_KEY="re_cPRPAQgm_EuYBEhUpJKVemz2PcuSWAhhZ"
+EMAIL_FROM='Joy Exchange <noreply@joy-exchange.com>'
+AUTO_SEED="true"
+SEED_ADMIN_EMAIL="admin@joy-exchange.com"
+SEED_ADMIN_PASSWORD="Eliteguy1122@"
+EOF
+```
+
+---
+## 7. Install dependencies and build
+```bash
+npm insta
+cd /var/www/novacar/giftcard-marketplace/gitcard-marketplacell
+npx prisma migrate deploy
+npx prisma generate
+node prisma/seed.cjs   # optional one-time seed
+npm run build
+```
+
+If you used AUTO_SEED, set it back to false after first run:
+```bash
+perl -0pi -e 's/AUTO_SEED="true"/AUTO_SEED="false"/g' .env
+```
+
+---
+## 8. Start with PM2
+```bash
+cd /var/www/novacar/giftcard-marketplace
+pm2 start npm --name joy-exchange -- start
+pm2 save
+pm2 startup
+```
+
+---
+## 9. Configure Nginx reverse proxy
+```bash
+sudo tee /etc/nginx/sites-available/joy-exchange <<'EOF'
+server {
+  listen 80;
+  server_name joy-exchange.com www.joy-exchange.com;
+
+  location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_cache_bypass $http_upgrade;
+  }
+}
+EOF
+
+sudo ln -s /etc/nginx/sites-available/joy-exchange /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+---
+## 10. DNS (Cloudflare or any DNS)
+- `@` A record → VPS IP
+- `www` CNAME → `joy-exchange.com`
+
+---
+## 11. HTTPS (Certbot)
+```bash
+sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d joy-exchange.com -d www.joy-exchange.com
+```
+
+---
+## 12. Firewall (recommended)
 ```bash
 sudo ufw allow OpenSSH
 sudo ufw allow 80
@@ -157,27 +161,20 @@ sudo ufw status
 ```
 
 ---
-## 7. Deploying updates
-1. SSH into the server and pull latest changes:
-   ```bash
-   cd /var/www/novacar/giftcard-marketplace
-   git pull origin main
-   npm install
-   npx prisma migrate deploy
-   npm run build
-   pm2 restart novacar --update-env
-   ```
-2. If you modify Prisma schema, rerun `npx prisma migrate deploy` before restarting the app.
+## 13. Deploy updates
+```bash
+cd /var/www/novacar/giftcard-marketplace
+git pull origin main
+npm install
+npx prisma migrate deploy
+npm run build
+pm2 restart joy-exchange
+```
 
 ---
-## 8. Troubleshooting
-- **App not reachable**: `pm2 logs novacar` and `sudo journalctl -u nginx`.
-- **Env vars missing**: ensure `.env` exists and `pm2 restart` after editing.
-- **Uploads/storage**: local `/public/uploads` works on VPS because the disk persists. Make sure folder permissions allow `pm2` user to write if you enable runtime uploads.
+## 14. Troubleshooting
+- **App not reachable**: `pm2 logs joy-exchange` and `sudo journalctl -u nginx`.
+- **Env vars missing**: edit `.env`, then `pm2 restart joy-exchange --update-env`.
+- **DB errors**: ensure PostgreSQL is running: `sudo systemctl status postgresql`.
 
-Auth-specific checks:
-- **Admin login not working**: make sure the DB was migrated + seeded.
-- **If using AUTO_SEED**: set `AUTO_SEED=true`, restart once, log in, then set it back to `false`.
-- **If auth errors about host**: ensure `NEXTAUTH_URL` matches your public domain (must be `https://mk.elitebytegh.uk`).
-
-That’s it! Your Next.js marketplace now runs on your VPS with a Cloudflare-backed domain.
+That’s it. This guide uses only official Ubuntu packages + NodeSource LTS to avoid outdated or random package sources.

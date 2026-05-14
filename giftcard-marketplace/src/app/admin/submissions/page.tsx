@@ -1,5 +1,5 @@
-import { readFile } from "fs/promises";
 import path from "path";
+import Link from "next/link";
 import SiteShell from "@/components/SiteShell";
 import StatusBadge from "@/components/StatusBadge";
 import { updateSubmissionStatus } from "@/app/actions/submissions";
@@ -23,12 +23,28 @@ type SubmissionWithExtras = {
   user: { name: string | null; email: string };
 };
 
-export default async function AdminSubmissionsPage() {
+const PAGE_SIZE = 5;
+
+type AdminSubmissionsPageProps = {
+  searchParams?: { page?: string };
+};
+
+export default async function AdminSubmissionsPage({ searchParams }: AdminSubmissionsPageProps) {
   await requireAdmin();
-  const submissionsRaw: SubmissionWithExtras[] = await prisma.submission.findMany({
-    include: { giftCard: true, user: true },
-    orderBy: { createdAt: "desc" },
-  });
+  const currentPage = Math.max(1, Number.parseInt(searchParams?.page ?? "1", 10) || 1);
+  const skip = (currentPage - 1) * PAGE_SIZE;
+
+  const [submissionsRaw, totalCount]: [SubmissionWithExtras[], number] = await Promise.all([
+    prisma.submission.findMany({
+      include: { giftCard: true, user: true },
+      orderBy: { createdAt: "desc" },
+      take: PAGE_SIZE,
+      skip,
+    }),
+    prisma.submission.count(),
+  ]);
+
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
   const submissions = await Promise.all(
     submissionsRaw.map(async (submission) => {
@@ -41,19 +57,12 @@ export default async function AdminSubmissionsPage() {
         }
       }
 
-      let cardImagePreview: { src: string; filename: string; downloadUrl: string } | null = null;
+      let cardImagePreview: { filename: string; downloadUrl: string } | null = null;
       if (submission.cardImagePath) {
-        try {
-          const buffer = await readFile(submission.cardImagePath);
-          const ext = path.extname(submission.cardImagePath).replace(".", "") || "png";
-          cardImagePreview = {
-            src: `data:image/${ext};base64,${buffer.toString("base64")}`,
-            filename: path.basename(submission.cardImagePath),
-            downloadUrl: `/admin/submissions/${submission.id}/image`,
-          };
-        } catch (error) {
-          cardImagePreview = null;
-        }
+        cardImagePreview = {
+          filename: path.basename(submission.cardImagePath),
+          downloadUrl: `/admin/submissions/${submission.id}/image`,
+        };
       }
 
       return {
@@ -79,6 +88,11 @@ export default async function AdminSubmissionsPage() {
           </p>
 
           <div className="mt-8 space-y-4">
+            {submissions.length === 0 && (
+              <div className="rounded-2xl border border-dashed border-slate-200/80 bg-white/70 p-6 text-center text-sm text-slate-500">
+                No submissions on this page.
+              </div>
+            )}
             {submissions.map((submission) => (
               <div
                 key={submission.id}
@@ -117,8 +131,9 @@ export default async function AdminSubmissionsPage() {
                     <div className="relative h-16 w-16 overflow-hidden rounded-xl border border-slate-100 bg-slate-50">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src={submission.cardImagePreview.src}
+                        src={submission.cardImagePreview.downloadUrl}
                         alt={submission.cardImagePreview.filename}
+                        loading="lazy"
                         className="h-full w-full object-contain"
                       />
                     </div>
@@ -166,6 +181,36 @@ export default async function AdminSubmissionsPage() {
                 </form>
               </div>
             ))}
+          </div>
+
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-slate-100 pt-6 text-sm text-slate-500">
+            <p>
+              Page {currentPage} of {totalPages} · Showing {submissions.length} of {totalCount} submissions
+            </p>
+            <div className="flex gap-2">
+              <Link
+                href={`/admin/submissions?page=${Math.max(1, currentPage - 1)}`}
+                className={`rounded-full border px-4 py-2 transition ${
+                  currentPage === 1
+                    ? "pointer-events-none border-slate-100 text-slate-300"
+                    : "border-slate-200 text-slate-600 hover:border-slate-300 hover:text-slate-900"
+                }`}
+                aria-disabled={currentPage === 1}
+              >
+                Previous
+              </Link>
+              <Link
+                href={`/admin/submissions?page=${Math.min(totalPages, currentPage + 1)}`}
+                className={`rounded-full border px-4 py-2 transition ${
+                  currentPage === totalPages
+                    ? "pointer-events-none border-slate-100 text-slate-300"
+                    : "border-slate-200 text-slate-600 hover:border-slate-300 hover:text-slate-900"
+                }`}
+                aria-disabled={currentPage === totalPages}
+              >
+                Next
+              </Link>
+            </div>
           </div>
         </div>
       </div>
